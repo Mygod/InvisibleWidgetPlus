@@ -1,13 +1,16 @@
 package tk.mygod.invisibleWidgetPlus;
 
-import android.app.ExpandableListActivity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +25,8 @@ import java.util.*;
 /**
  * The configuration screen for the {@link InvisibleWidget InvisibleWidget} AppWidget.
  */
-public class InvisibleWidgetConfigureActivity extends ExpandableListActivity
-        implements AdapterView.OnItemLongClickListener {
+public class InvisibleWidgetConfigureActivity extends ActionBarActivity
+        implements ExpandableListView.OnChildClickListener, AdapterView.OnItemLongClickListener {
     private static final Predicate<PackageInfo> packagePredicate = new Predicate<PackageInfo>() {
         @Override
         public boolean apply(PackageInfo obj) {
@@ -40,8 +43,10 @@ public class InvisibleWidgetConfigureActivity extends ExpandableListActivity
         @Override
         public int compare(PackageInfo lhs, PackageInfo rhs) {
             PackageManager manager = getPackageManager();
-            return lhs.applicationInfo.loadLabel(manager).toString()
-                    .compareTo(rhs.applicationInfo.loadLabel(manager).toString());
+            String ll = lhs.applicationInfo.loadLabel(manager).toString(),
+                   rl = rhs.applicationInfo.loadLabel(manager).toString();
+            int result = ll.toLowerCase().compareTo(rl.toLowerCase());
+            return result == 0 ? ll.compareTo(rl) : result;
         }
     };
 
@@ -243,6 +248,7 @@ public class InvisibleWidgetConfigureActivity extends ExpandableListActivity
             return;
         }
         setContentView(R.layout.activity_chooser);
+        final ExpandableListView list = (ExpandableListView) findViewById(android.R.id.list);
         (new Thread() {
             @Override
             public void run() {
@@ -250,15 +256,16 @@ public class InvisibleWidgetConfigureActivity extends ExpandableListActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        setListAdapter(adapter);
+                        list.setAdapter(adapter);
                     }
                 });
             }
         }).start();
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        ExpandableListView list = getExpandableListView();
+        list.setEmptyView(findViewById(android.R.id.empty));
         list.setOnChildClickListener(this);
         list.setOnItemLongClickListener(this);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -272,8 +279,8 @@ public class InvisibleWidgetConfigureActivity extends ExpandableListActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.do_nothing:
-                PreferenceManager.getDefaultSharedPreferences(this).edit().putString(Integer.toString(widgetId), "")
-                                 .apply();
+                save(PreferenceManager.getDefaultSharedPreferences(this).edit()
+                        .putString(Integer.toString(widgetId), ""));
                 setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
             case android.R.id.home:
                 finish();
@@ -298,8 +305,8 @@ public class InvisibleWidgetConfigureActivity extends ExpandableListActivity
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         ActivityInfo info = (ActivityInfo) adapter.getChild(groupPosition, childPosition);
         String prefix = Integer.toString(widgetId);
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putString(prefix, info.packageName)
-                         .putString(prefix + "_name", info.name).apply();
+        save(PreferenceManager.getDefaultSharedPreferences(this).edit().putString(prefix, info.packageName)
+                         .putString(prefix + "_name", info.name));
         setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
         InvisibleWidget.update(this, AppWidgetManager.getInstance(this), widgetId);
         finish();
@@ -328,6 +335,11 @@ public class InvisibleWidgetConfigureActivity extends ExpandableListActivity
             return true;
         }
         return false;
+    }
+
+    private void save(SharedPreferences.Editor editor) {
+        if (Build.VERSION.SDK_INT >= 9) editor.apply();
+        else editor.commit();
     }
 }
 

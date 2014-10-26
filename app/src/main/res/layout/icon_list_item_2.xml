@@ -5,7 +5,7 @@
     <ImageView android:id="@android:id/icon" android:layout_width="48dp" android:layout_height="48dp"/>
     <LinearLayout android:orientation="vertical" android:paddingLeft="5dp"
                   android:layout_width="match_parent" android:layout_height="wrap_content">
-        <TextView android:id="@android:id/text1" android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        <TextView android:id="@android:id/text1" android:textAppearance="?android:attr/textAppearance"
                   android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" />
         <TextView android:id="@android:id/text2" android:textAppearance="?android:attr/textAppearanceSmall"
                   android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" />
