@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/do_nothing" android:title="@string/menu_do_nothing" android:icon="@drawable/ic_menu_block"
-          app:showAsAction="always" android:alphabeticShortcut="n" android:numericShortcut="1" />
-</menu>
