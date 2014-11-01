@@ -26,7 +26,7 @@ public class InvisibleWidgetConfigureActivity extends ActionBarActivity
     private static final Predicate<PackageInfo> packagePredicate = new Predicate<PackageInfo>() {
         @Override
         public boolean apply(PackageInfo obj) {
-            return obj.activities != null;
+            return obj.activities != null && obj.activities.length > 0;
         }
     };
     private static final Predicate<ActivityInfo> activityPredicate = new Predicate<ActivityInfo>() {
@@ -119,7 +119,7 @@ public class InvisibleWidgetConfigureActivity extends ActionBarActivity
                                  ViewGroup parent) {
             if (convertView == null)
                 convertView = getLayoutInflater().inflate(R.layout.icon_list_item_2, parent, false);
-            convertView.setBackgroundResource(R.color.background_darker_light);
+            convertView.setBackgroundResource(R.color.background_darker);
             int padding = (int) (56 * getResources().getDisplayMetrics().density + 0.5);
             if (Build.VERSION.SDK_INT >= 17) convertView.setPaddingRelative(padding, 0, 0, 0);
             else convertView.setPadding(padding, 0, 0, 0);

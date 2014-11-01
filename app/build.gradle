@@ -14,14 +14,14 @@ repositories {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion '21.0.2'
+    buildToolsVersion '21.1.0'
 
     defaultConfig {
         applicationId "tk.mygod.invisibleWidgetPlus"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 302
-        versionName "2.0.1.302"
+        versionCode 307
+        versionName "2.0.2.307"
     }
     buildTypes {
         release {
