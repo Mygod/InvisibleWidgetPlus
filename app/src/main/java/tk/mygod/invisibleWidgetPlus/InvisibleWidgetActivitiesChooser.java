@@ -1,27 +1,22 @@
 package tk.mygod.invisibleWidgetPlus;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.melnykov.fab.FloatingActionButton;
 import tk.mygod.util.CollectionUtils;
 import tk.mygod.util.Predicate;
 
 import java.util.*;
 
-public class InvisibleWidgetConfigureActivity extends ActionBarActivity
+public class InvisibleWidgetActivitiesChooser extends ActionBarActivity
         implements ExpandableListView.OnChildClickListener, AdapterView.OnItemLongClickListener {
     private static final Predicate<PackageInfo> packagePredicate = new Predicate<PackageInfo>() {
         @Override
@@ -138,21 +133,13 @@ public class InvisibleWidgetConfigureActivity extends ActionBarActivity
         }
     }
 
-    private int widgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private ActivitiesExpandableListAdapter adapter;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setResult(RESULT_CANCELED);
-        Bundle extras = getIntent().getExtras();
-        if (extras != null)
-            widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish();
-            return;
-        }
-        setContentView(R.layout.activity_chooser);
+        setContentView(R.layout.activities_chooser);
         final ExpandableListView list = (ExpandableListView) findViewById(android.R.id.list);
         (new Thread() {
             @Override
@@ -169,9 +156,7 @@ public class InvisibleWidgetConfigureActivity extends ActionBarActivity
         list.setEmptyView(findViewById(android.R.id.empty));
         list.setOnChildClickListener(this);
         list.setOnItemLongClickListener(this);
-        ((FloatingActionButton) findViewById(R.id.fab)).attachToListView(list);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -183,21 +168,10 @@ public class InvisibleWidgetConfigureActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void doNothing(View view) {
-        save(PreferenceManager.getDefaultSharedPreferences(this).edit()
-                .putString(Integer.toString(widgetId), ""));
-        setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
-        finish();
-    }
-
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         ActivityInfo info = (ActivityInfo) adapter.getChild(groupPosition, childPosition);
-        String prefix = Integer.toString(widgetId);
-        save(PreferenceManager.getDefaultSharedPreferences(this).edit().putString(prefix, info.packageName)
-                         .putString(prefix + "_name", info.name));
-        setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
-        InvisibleWidget.update(this, AppWidgetManager.getInstance(this), widgetId);
+        setResult(RESULT_OK, new Intent().putExtra("package", info.packageName).putExtra("name", info.name));
         finish();
         return true;
     }
@@ -212,10 +186,5 @@ public class InvisibleWidgetConfigureActivity extends ActionBarActivity
             return true;
         }
         return false;
-    }
-
-    private void save(SharedPreferences.Editor editor) {
-        if (Build.VERSION.SDK_INT >= 9) editor.apply();
-        else editor.commit();
     }
 }
