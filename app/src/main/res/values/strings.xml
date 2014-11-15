@@ -2,6 +2,9 @@
 <resources>
 
     <string name="app_name">Invisible Widget+</string>
-    <string name="configure_label">Pick activity</string>
+    <string name="configure_label">Pick action</string>
+    <string name="title_activities">Activities</string>
+    <string name="title_shortcuts">Shortcuts</string>
+    <string name="title_other">Other</string>
 
 </resources>

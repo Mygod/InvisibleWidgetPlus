@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_height="match_parent" android:layout_width="match_parent">
+    <LinearLayout android:background="?attr/colorPrimary" android:elevation="4dp" android:orientation="vertical"
+                  android:layout_width="match_parent" android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar android:id="@+id/toolbar" android:layout_width="match_parent"
+                                           android:layout_height="?attr/actionBarSize"
+                                           app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        <tk.mygod.widget.SlidingTabLayout android:id="@+id/sliding_tabs"
+                                          android:layout_width="match_parent" android:layout_height="wrap_content"
+                                          app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    </LinearLayout>
+    <android.support.v4.view.ViewPager android:id="@+id/view_pager" android:layout_width="match_parent"
+                                       android:layout_height="match_parent" />
+</LinearLayout>

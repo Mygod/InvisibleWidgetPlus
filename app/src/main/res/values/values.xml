@@ -4,9 +4,9 @@
     <color name="material_blue_500">#5677fc</color>
     <color name="material_blue_700">#455ede</color>
     <color name="background_darker">#1000</color>
-    <style name="Theme.Material.Blue" parent="Theme.AppCompat.Light">
+    <style name="Theme.Material.Blue" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/material_blue_500</item>
         <item name="colorPrimaryDark">@color/material_blue_700</item>
-        <item name="android:textColorPrimary">@android:color/primary_text_dark</item>
+        <item name="colorAccent">@color/material_blue_300</item>
     </style>
 </resources>
