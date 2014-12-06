@@ -84,7 +84,7 @@ public class InvisibleWidgetActionsChooser extends ActionBarActivity implements 
         Bundle extras = getIntent().getExtras();
         if (extras != null)
             widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-        if (false && widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
             return;
         }
@@ -146,7 +146,7 @@ public class InvisibleWidgetActionsChooser extends ActionBarActivity implements 
                 .putString(prefix + "_uri", ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0));
         editor.apply();
         InvisibleWidget.update(this, AppWidgetManager.getInstance(this), widgetId);
-        setResult(RESULT_OK, new Intent());
+        setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
         finish();
     }
 }
