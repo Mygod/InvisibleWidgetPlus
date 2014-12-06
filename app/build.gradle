@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.13.0'
+        classpath 'com.android.tools.build:gradle:0.14.2'
     }
 }
 apply plugin: 'com.android.application'
@@ -20,8 +20,8 @@ android {
         applicationId "tk.mygod.invisibleWidgetPlus"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 308
-        versionName "2.1.3.308"
+        versionCode 312
+        versionName "2.1.4.312"
     }
     buildTypes {
         release {
@@ -32,6 +32,6 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:+'
+    compile 'com.android.support:appcompat-v7:21.0.2'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
