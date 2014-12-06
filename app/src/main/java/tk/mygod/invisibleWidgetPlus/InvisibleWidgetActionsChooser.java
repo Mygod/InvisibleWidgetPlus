@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +90,8 @@ public class InvisibleWidgetActionsChooser extends ActionBarActivity implements 
             return;
         }
         setContentView(R.layout.actions_chooser);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         final ListView list = (ListView) findViewById(android.R.id.list);
         (new Thread() {
             @Override
@@ -104,7 +107,6 @@ public class InvisibleWidgetActionsChooser extends ActionBarActivity implements 
         }).start();
         list.setEmptyView(findViewById(android.R.id.empty));
         list.setOnItemClickListener(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

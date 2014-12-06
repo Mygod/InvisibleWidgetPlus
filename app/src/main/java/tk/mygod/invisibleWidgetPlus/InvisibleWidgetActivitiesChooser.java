@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,6 +141,8 @@ public class InvisibleWidgetActivitiesChooser extends ActionBarActivity
         super.onCreate(icicle);
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activities_chooser);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         final ExpandableListView list = (ExpandableListView) findViewById(android.R.id.list);
         (new Thread() {
             @Override
@@ -156,7 +159,6 @@ public class InvisibleWidgetActivitiesChooser extends ActionBarActivity
         list.setEmptyView(findViewById(android.R.id.empty));
         list.setOnChildClickListener(this);
         list.setOnItemLongClickListener(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
