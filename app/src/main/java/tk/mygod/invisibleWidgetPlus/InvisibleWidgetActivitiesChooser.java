@@ -141,7 +141,7 @@ public class InvisibleWidgetActivitiesChooser extends Activity
         super.onCreate(icicle);
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activities_chooser);
-        new ToolbarConfigurer(this, (Toolbar) findViewById(R.id.toolbar), 0);
+        new ToolbarConfigurer(this, (Toolbar) findViewById(R.id.toolbar), R.drawable.ic_close);
         final ExpandableListView list = (ExpandableListView) findViewById(android.R.id.list);
         (new Thread() {
             @Override
@@ -173,7 +173,15 @@ public class InvisibleWidgetActivitiesChooser extends Activity
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         ActivityInfo info = (ActivityInfo) adapter.getChild(groupPosition, childPosition);
-        setResult(RESULT_OK, new Intent().putExtra("package", info.packageName).putExtra("name", info.name));
+        try {
+            setResult(RESULT_OK, new Intent()
+                    .putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent().setClassName(info.packageName, info.name))
+                    .putExtra(Intent.EXTRA_SHORTCUT_NAME, info.loadLabel(getPackageManager()))
+                    .putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource
+                            .fromContext(createPackageContext(info.packageName, 0), info.getIconResource())));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();    // how is this possible though
+        }
         finish();
         return true;
     }

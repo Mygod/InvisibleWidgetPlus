@@ -5,6 +5,5 @@
     <string name="configure_label">选择操作</string>
     <string name="action_activities">活动</string>
     <string name="action_do_nothing">呆若木鸡（即什么都不干）</string>
-    <string name="pick_activity">选择活动</string>
 
 </resources>

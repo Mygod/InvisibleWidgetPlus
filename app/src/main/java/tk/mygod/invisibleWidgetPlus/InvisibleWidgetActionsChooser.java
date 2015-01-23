@@ -42,12 +42,12 @@ public class InvisibleWidgetActionsChooser extends Activity implements ListView.
 
         @Override
         public int getCount() {
-            return shortcuts.size() + 2;
+            return shortcuts.size() + 1;
         }
 
         @Override
         public Object getItem(int position) {
-            return position == 0 ? null : position == 1 ? "activities" : shortcuts.get(position - 2);
+            return position == 0 ? null : shortcuts.get(position - 1);
         }
 
         @Override
@@ -64,13 +64,13 @@ public class InvisibleWidgetActionsChooser extends Activity implements ListView.
             PackageManager manager = getPackageManager();
             ImageView icon = (ImageView) convertView.findViewById(android.R.id.icon);
             TextView text1 = (TextView) convertView.findViewById(android.R.id.text1);
-            if (position > 1) {
-                ResolveInfo info = shortcuts.get(position - 2);
+            if (position > 0) {
+                ResolveInfo info = shortcuts.get(position - 1);
                 icon.setImageDrawable(info.loadIcon(manager));
                 text1.setText(info.loadLabel(manager));
             } else {
                 icon.setImageDrawable(getResources().getDrawable(R.drawable.invisible));
-                text1.setText(getString(position == 0 ? R.string.action_do_nothing : R.string.action_activities));
+                text1.setText(getString(R.string.action_do_nothing));
             }
             return convertView;
         }
@@ -126,8 +126,7 @@ public class InvisibleWidgetActionsChooser extends Activity implements ListView.
                              .apply();
             setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
             finish();
-        } else if (position == 1) startActivityForResult(new Intent(this, InvisibleWidgetActivitiesChooser.class), 1);
-        else {
+        } else {
             ActivityInfo info = ((ResolveInfo) adapter.getItem(position)).activityInfo;
             startActivityForResult(new Intent(Intent.ACTION_CREATE_SHORTCUT).setClassName(info.packageName, info.name)
                     .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId), position);
@@ -136,17 +135,13 @@ public class InvisibleWidgetActionsChooser extends Activity implements ListView.
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK || requestCode <= 0 || requestCode > adapter.getCount() + 1) {
+        if (resultCode != RESULT_OK || requestCode <= 0 || requestCode > adapter.getCount()) {
             super.onActivityResult(requestCode, resultCode, data);
             return;
         }
         String prefix = Integer.toString(widgetId);
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        if (requestCode == 1) editor.putString(prefix, "activity")
-                .putString(prefix + "_package", data.getStringExtra("package"))
-                .putString(prefix + "_name", data.getStringExtra("name"));
-        else editor.putString(prefix, "shortcut")
-                .putString(prefix + "_uri", ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0));
+        editor.putString(prefix, ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0));
         editor.apply();
         InvisibleWidget.update(this, AppWidgetManager.getInstance(this), widgetId);
         setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
