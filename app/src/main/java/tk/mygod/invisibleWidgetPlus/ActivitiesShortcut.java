@@ -18,7 +18,7 @@ import tk.mygod.util.Predicate;
 
 import java.util.*;
 
-public class InvisibleWidgetActivitiesChooser extends Activity
+public class ActivitiesShortcut extends Activity
         implements ExpandableListView.OnChildClickListener, AdapterView.OnItemLongClickListener {
     private static final Predicate<PackageInfo> packagePredicate = new Predicate<PackageInfo>() {
         @Override
@@ -151,7 +151,7 @@ public class InvisibleWidgetActivitiesChooser extends Activity
                     @Override
                     public void run() {
                         list.setAdapter(adapter);
-                        InvisibleWidget.crossFade(InvisibleWidgetActivitiesChooser.this,
+                        InvisibleWidget.crossFade(ActivitiesShortcut.this,
                                 findViewById(android.R.id.empty), list);
                     }
                 });

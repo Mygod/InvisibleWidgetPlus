@@ -14,7 +14,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".InvisibleWidgetActivitiesChooser" android:label="@string/action_activities">
+        <activity android:name=".ActivitiesShortcut" android:label="@string/action_activities">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
