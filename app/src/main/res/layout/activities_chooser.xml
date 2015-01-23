@@ -3,11 +3,12 @@
               android:layout_width="match_parent" android:layout_height="match_parent">
     <include layout="@layout/toolbar" />
     <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
-        <LinearLayout android:id="@android:id/empty" android:gravity="center" android:visibility="gone"
+        <LinearLayout android:id="@android:id/empty" android:gravity="center"
                       android:layout_width="match_parent" android:layout_height="match_parent">
             <ProgressBar android:layout_width="wrap_content" android:layout_height="wrap_content" />
         </LinearLayout>
-        <ExpandableListView android:id="@android:id/list" android:drawSelectorOnTop="false" android:fastScrollEnabled="true"
+        <ExpandableListView android:id="@android:id/list" android:drawSelectorOnTop="false"
+                            android:fastScrollEnabled="true" android:visibility="gone"
                             android:layout_width="match_parent" android:layout_height="match_parent" />
     </FrameLayout>
 </LinearLayout>

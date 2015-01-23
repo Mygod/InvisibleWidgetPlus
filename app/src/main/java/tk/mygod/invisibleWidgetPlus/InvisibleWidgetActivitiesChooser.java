@@ -1,23 +1,24 @@
 package tk.mygod.invisibleWidgetPlus;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import tk.mygod.support.v7.util.ToolbarConfigurer;
 import tk.mygod.util.CollectionUtils;
 import tk.mygod.util.Predicate;
 
 import java.util.*;
 
-public class InvisibleWidgetActivitiesChooser extends ActionBarActivity
+public class InvisibleWidgetActivitiesChooser extends Activity
         implements ExpandableListView.OnChildClickListener, AdapterView.OnItemLongClickListener {
     private static final Predicate<PackageInfo> packagePredicate = new Predicate<PackageInfo>() {
         @Override
@@ -58,8 +59,7 @@ public class InvisibleWidgetActivitiesChooser extends ActionBarActivity
 
         private List<PackageInfo> packages = CollectionUtils.filter(getPackageManager()
                 .getInstalledPackages(PackageManager.GET_ACTIVITIES), packagePredicate);
-        private HashMap<PackageInfo, ArrayList<ActivityInfo>>
-                activities = new HashMap<PackageInfo, ArrayList<ActivityInfo>>();
+        private HashMap<PackageInfo, ArrayList<ActivityInfo>> activities = new HashMap<>();
         private int[] activitiesCounts;
 
         @Override
@@ -141,8 +141,7 @@ public class InvisibleWidgetActivitiesChooser extends ActionBarActivity
         super.onCreate(icicle);
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activities_chooser);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        new ToolbarConfigurer(this, (Toolbar) findViewById(R.id.toolbar), 0);
         final ExpandableListView list = (ExpandableListView) findViewById(android.R.id.list);
         (new Thread() {
             @Override
@@ -152,11 +151,12 @@ public class InvisibleWidgetActivitiesChooser extends ActionBarActivity
                     @Override
                     public void run() {
                         list.setAdapter(adapter);
+                        InvisibleWidget.crossFade(InvisibleWidgetActivitiesChooser.this,
+                                findViewById(android.R.id.empty), list);
                     }
                 });
             }
         }).start();
-        list.setEmptyView(findViewById(android.R.id.empty));
         list.setOnChildClickListener(this);
         list.setOnItemLongClickListener(this);
     }

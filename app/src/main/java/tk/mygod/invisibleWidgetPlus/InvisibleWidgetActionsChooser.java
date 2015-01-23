@@ -1,5 +1,6 @@
 package tk.mygod.invisibleWidgetPlus;
 
+import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,18 +10,18 @@ import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import tk.mygod.support.v7.util.ToolbarConfigurer;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class InvisibleWidgetActionsChooser extends ActionBarActivity implements ListView.OnItemClickListener {
+public class InvisibleWidgetActionsChooser extends Activity implements ListView.OnItemClickListener {
     private final Comparator<ResolveInfo> shortcutSorter = new Comparator<ResolveInfo>() {
         @Override
         public int compare(ResolveInfo lhs, ResolveInfo rhs) {
@@ -90,8 +91,7 @@ public class InvisibleWidgetActionsChooser extends ActionBarActivity implements 
             return;
         }
         setContentView(R.layout.actions_chooser);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        new ToolbarConfigurer(this, (Toolbar) findViewById(R.id.toolbar), R.drawable.ic_close);
         final ListView list = (ListView) findViewById(android.R.id.list);
         (new Thread() {
             @Override
@@ -101,11 +101,12 @@ public class InvisibleWidgetActionsChooser extends ActionBarActivity implements 
                     @Override
                     public void run() {
                         list.setAdapter(adapter);
+                        InvisibleWidget.crossFade(InvisibleWidgetActionsChooser.this,
+                                findViewById(android.R.id.empty), list);
                     }
                 });
             }
         }).start();
-        list.setEmptyView(findViewById(android.R.id.empty));
         list.setOnItemClickListener(this);
     }
 
