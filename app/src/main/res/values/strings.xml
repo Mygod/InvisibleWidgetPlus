@@ -3,7 +3,7 @@
 
     <string name="app_name">Invisible Widget+</string>
     <string name="configure_label">Pick action</string>
-    <string name="action_do_nothing">Gaze at the user (which means doing nothing)</string>
+    <string name="action_do_nothing">Do nothing</string>
     <string name="action_activities">Activities</string>
 
 </resources>

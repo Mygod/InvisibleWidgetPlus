@@ -7,9 +7,9 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,12 +42,12 @@ public class InvisibleWidgetActionsChooser extends Activity implements ListView.
 
         @Override
         public int getCount() {
-            return shortcuts.size() + 1;
+            return shortcuts.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return position == 0 ? null : shortcuts.get(position - 1);
+            return shortcuts.get(position);
         }
 
         @Override
@@ -59,19 +59,11 @@ public class InvisibleWidgetActionsChooser extends Activity implements ListView.
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null)
                 convertView = getLayoutInflater().inflate(R.layout.icon_list_item_1, parent, false);
-            if (Build.VERSION.SDK_INT >= 17) convertView.setPaddingRelative(0, 0, 0, 0);
-            else convertView.setPadding(0, 0, 0, 0);
+            ViewCompat.setPaddingRelative(convertView, 0, 0, 0, 0);
             PackageManager manager = getPackageManager();
-            ImageView icon = (ImageView) convertView.findViewById(android.R.id.icon);
-            TextView text1 = (TextView) convertView.findViewById(android.R.id.text1);
-            if (position > 0) {
-                ResolveInfo info = shortcuts.get(position - 1);
-                icon.setImageDrawable(info.loadIcon(manager));
-                text1.setText(info.loadLabel(manager));
-            } else {
-                icon.setImageDrawable(getResources().getDrawable(R.drawable.invisible));
-                text1.setText(getString(R.string.action_do_nothing));
-            }
+            ResolveInfo info = shortcuts.get(position);
+            ((ImageView) convertView.findViewById(android.R.id.icon)).setImageDrawable(info.loadIcon(manager));
+            ((TextView) convertView.findViewById(android.R.id.text1)).setText(info.loadLabel(manager));
             return convertView;
         }
     }
@@ -121,29 +113,24 @@ public class InvisibleWidgetActionsChooser extends Activity implements ListView.
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position == 0) {
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putString(Integer.toString(widgetId), "")
-                             .apply();
-            setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
-            finish();
-        } else {
-            ActivityInfo info = ((ResolveInfo) adapter.getItem(position)).activityInfo;
-            startActivityForResult(new Intent(Intent.ACTION_CREATE_SHORTCUT).setClassName(info.packageName, info.name)
-                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId), position);
-        }
+        ActivityInfo info = ((ResolveInfo) adapter.getItem(position)).activityInfo;
+        startActivityForResult(new Intent(Intent.ACTION_CREATE_SHORTCUT).setClassName(info.packageName, info.name)
+                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId), position);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK || requestCode <= 0 || requestCode > adapter.getCount()) {
+        if (resultCode != RESULT_OK || requestCode < 0 || requestCode >= adapter.getCount()) {
             super.onActivityResult(requestCode, resultCode, data);
             return;
         }
-        String prefix = Integer.toString(widgetId);
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        editor.putString(prefix, ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0));
-        editor.apply();
-        InvisibleWidget.update(this, AppWidgetManager.getInstance(this), widgetId);
+        String uri = ((Intent) data.getExtras().get(Intent.EXTRA_SHORTCUT_INTENT)).toUri(0);
+        if (!DoNothingShortcut.getEmptyIntentUri(this).equals(uri)) {
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+            editor.putString(Integer.toString(widgetId), uri);
+            editor.apply();
+            InvisibleWidget.update(this, AppWidgetManager.getInstance(this), widgetId);
+        }
         setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
         finish();
     }

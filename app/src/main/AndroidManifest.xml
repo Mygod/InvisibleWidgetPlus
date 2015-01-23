@@ -20,6 +20,13 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".DoNothingShortcut" android:label="@string/action_do_nothing"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+            </intent-filter>
+        </activity>
+
         <receiver android:name=".InvisibleWidget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
