@@ -1,9 +1,10 @@
 package tk.mygod.invisibleWidgetPlus
 
 import android.app.Activity
-import android.content.Intent
+import android.content.{ActivityNotFoundException, Intent}
 import android.content.pm.{PackageInfo, PackageManager}
 import android.os.Bundle
+import android.provider.Settings
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.Toolbar
 import android.view.{View, ViewGroup}
@@ -12,6 +13,7 @@ import android.widget.ExpandableListView.OnChildClickListener
 import android.widget._
 import tk.mygod.animation.AnimationHelper
 import tk.mygod.app.ActivityPlus
+import tk.mygod.net.Utils._
 import tk.mygod.support.v7.util.ToolbarConfigurer
 import tk.mygod.text.TextUtils
 
@@ -118,13 +120,21 @@ final class ActivitiesShortcut extends ActivityPlus with OnChildClickListener wi
   }
 
   override def onItemLongClick(parent: AdapterView[_], view: View, position: Int, id: Long) = {
-    if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-      val groupPosition = ExpandableListView.getPackedPositionGroup(id)
-      val info = adapter.getChild(groupPosition,
-        ExpandableListView.getPackedPositionChild(id) - adapter.activitiesCounts(groupPosition))
-      startActivity(new Intent().setClassName(info.packageName, info.name))
-      true
+    val groupPosition = ExpandableListView.getPackedPositionGroup(id)
+    ExpandableListView.getPackedPositionType(id) match {
+      case ExpandableListView.PACKED_POSITION_TYPE_GROUP =>
+        try startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+          .setData("package:" + adapter.getGroup(groupPosition).packageInfo.packageName))
+        catch {
+          case exc: ActivityNotFoundException => exc.printStackTrace()
+        }
+        true
+      case ExpandableListView.PACKED_POSITION_TYPE_CHILD =>
+        val info = adapter.getChild(groupPosition,
+          ExpandableListView.getPackedPositionChild(id) - adapter.activitiesCounts(groupPosition))
+        startActivity(new Intent().setClassName(info.packageName, info.name))
+        true
+      case _ => false
     }
-    false
   }
 }
