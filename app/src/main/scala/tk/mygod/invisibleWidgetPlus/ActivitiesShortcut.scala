@@ -1,7 +1,7 @@
 package tk.mygod.invisibleWidgetPlus
 
 import android.app.Activity
-import android.content.{ActivityNotFoundException, Intent}
+import android.content.Intent
 import android.content.pm.{PackageInfo, PackageManager}
 import android.os.Bundle
 import android.provider.Settings
@@ -123,13 +123,10 @@ final class ActivitiesShortcut extends ActivityPlus with OnChildClickListener wi
 
   override def onItemLongClick(parent: AdapterView[_], view: View, position: Int, id: Long) = {
     val groupPosition = ExpandableListView.getPackedPositionGroup(id)
-    ExpandableListView.getPackedPositionType(id) match {
+    try ExpandableListView.getPackedPositionType(id) match {
       case ExpandableListView.PACKED_POSITION_TYPE_GROUP =>
-        try startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
           .setData("package:" + adapter.getGroup(groupPosition).packageInfo.packageName))
-        catch {
-          case exc: ActivityNotFoundException => exc.printStackTrace()
-        }
         true
       case ExpandableListView.PACKED_POSITION_TYPE_CHILD =>
         val info = adapter.getChild(groupPosition,
@@ -137,6 +134,11 @@ final class ActivitiesShortcut extends ActivityPlus with OnChildClickListener wi
         startActivity(new Intent().setClassName(info.packageName, info.name))
         true
       case _ => false
+    } catch {
+      case exc: Throwable =>
+        showToast(exc.getMessage)
+        exc.printStackTrace()
+        true
     }
   }
 }
