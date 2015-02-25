@@ -29,13 +29,14 @@ class ShortcutsChooser extends ActivityPlus with OnItemClickListener {
     override def getItem(position: Int) = shortcuts(position)
     override def getItemId(position: Int) = position
     override def getView(position: Int, convertView: View, parent: ViewGroup) = {
-      val result = if (convertView == null) getLayoutInflater.inflate(R.layout.icon_list_item_1, parent, false)
+      val result = if (convertView == null) getLayoutInflater.inflate(R.layout.icon_list_item_2, parent, false)
         else convertView
       result.setPadding(0, 0, 0, 0)
       val manager = getPackageManager
       val info = shortcuts(position)
       result.findViewById(android.R.id.icon).asInstanceOf[ImageView].setImageDrawable(info.loadIcon(manager))
       result.findViewById(android.R.id.text1).asInstanceOf[TextView].setText(info.loadLabel(manager))
+      result.findViewById(android.R.id.text2).asInstanceOf[TextView].setText(info.activityInfo.name)
       result
     }
   }
