@@ -20,8 +20,6 @@ import scala.concurrent.Future
  * @author Mygod
  */
 class ShortcutsChooser extends ActivityPlus with OnItemClickListener {
-  lazy val manager = getPackageManager
-
   private final class ShortcutsListAdapter extends BaseAdapter {
     private val shortcuts = ShortcutsFetcher.getShortcuts(getPackageManager)
 
@@ -31,7 +29,6 @@ class ShortcutsChooser extends ActivityPlus with OnItemClickListener {
     override def getView(position: Int, convertView: View, parent: ViewGroup) = {
       val result = if (convertView == null) getLayoutInflater.inflate(R.layout.icon_list_item_2, parent, false)
         else convertView
-      result.setPadding(0, 0, 0, 0)
       val manager = getPackageManager
       val info = shortcuts(position)
       result.findViewById(android.R.id.icon).asInstanceOf[ImageView].setImageDrawable(info.loadIcon(manager))

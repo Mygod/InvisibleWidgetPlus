@@ -41,6 +41,9 @@ final class ActivitiesShortcut extends ActivityPlus with OnChildClickListener wi
     override def getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View, parent: ViewGroup) = {
       val result = if (convertView == null) getLayoutInflater.inflate(R.layout.icon_list_item_2, parent, false)
         else convertView
+      val startPadding = (28 * getResources.getDisplayMetrics.density + 0.5).toInt
+      val endPadding = (4 * getResources.getDisplayMetrics.density + 0.5).toInt
+      ViewCompat.setPaddingRelative(result, startPadding, 0, endPadding, 0)
       val info = packages(groupPosition).packageInfo
       val manager = getPackageManager
       result.findViewById(android.R.id.icon).asInstanceOf[ImageView]
@@ -55,8 +58,9 @@ final class ActivitiesShortcut extends ActivityPlus with OnChildClickListener wi
       val result = if (convertView == null) getLayoutInflater.inflate(R.layout.icon_list_item_2, parent, false)
         else convertView
       result.setBackgroundResource(R.color.background_darker)
-      val padding = (56 * getResources.getDisplayMetrics.density + 0.5).toInt
-      ViewCompat.setPaddingRelative(result, padding, 0, 0, 0)
+      val startPadding = (56 * getResources.getDisplayMetrics.density + 0.5).toInt
+      val endPadding = (4 * getResources.getDisplayMetrics.density + 0.5).toInt
+      ViewCompat.setPaddingRelative(result, startPadding, 0, endPadding, 0)
       val info = packages(groupPosition).exportedActivities(childPosition)
       val manager = getPackageManager
       result.findViewById(android.R.id.icon).asInstanceOf[ImageView].setImageDrawable(info.loadIcon(manager))

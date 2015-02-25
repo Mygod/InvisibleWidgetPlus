@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:paddingLeft="32dp"
-              android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingStart="32dp">
-    <ImageView android:id="@android:id/icon" android:layout_width="48dp" android:layout_height="48dp"/>
-    <LinearLayout android:orientation="vertical" android:paddingLeft="5dp" android:paddingStart="5dp"
-                  android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:layout_gravity="start|center_vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:paddingLeft="4dp"
+              android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingRight="4dp">
+    <ImageView android:id="@android:id/icon" android:layout_width="52dp" android:layout_height="52dp"/>
+    <Space android:layout_width="4dp" android:layout_height="wrap_content" />
+    <LinearLayout android:orientation="vertical" android:layout_gravity="start|center_vertical"
+                  android:layout_width="match_parent" android:layout_height="wrap_content">
         <TextView android:id="@android:id/text1" android:textAppearance="?android:attr/textAppearance"
                   android:textColor="@android:color/primary_text_light"
                   android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="2" />
