@@ -27,12 +27,14 @@ import scala.concurrent.Future
 final class ActivitiesShortcut extends ActivityPlus with OnChildClickListener with OnItemLongClickListener {
   private final class Package(val packageInfo : PackageInfo) {
     val exportedActivities = if (packageInfo.activities == null) null
-      else packageInfo.activities.filter(info => info.exported)
+      else packageInfo.activities.filter(info => info.exported && info.enabled)
   }
 
   private final class ActivitiesExpandableListAdapter extends BaseExpandableListAdapter {
     private val packages = getPackageManager.getInstalledPackages(PackageManager.GET_ACTIVITIES).map(new Package(_))
-      .filter(p => p.exportedActivities != null && p.exportedActivities.length > 0).sortWith((lhs, rhs) => {
+      .filter(p => p.packageInfo.applicationInfo.enabled &&
+                   p.exportedActivities != null && p.exportedActivities.length > 0)
+      .sortWith((lhs, rhs) => {
         val manager = getPackageManager
         TextUtils.lessThanCaseInsensitive(lhs.packageInfo.applicationInfo.loadLabel(manager).toString,
                                           rhs.packageInfo.applicationInfo.loadLabel(manager).toString)
