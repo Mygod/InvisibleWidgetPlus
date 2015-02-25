@@ -12,22 +12,18 @@ import android.widget._
 import tk.mygod.animation.AnimationHelper
 import tk.mygod.app.ActivityPlus
 import tk.mygod.support.v7.util.ToolbarConfigurer
-import tk.mygod.text.TextUtils
 
-import scala.collection.JavaConversions._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 /**
  * @author Mygod
  */
-class InvisibleWidgetActionsChooser extends ActivityPlus with OnItemClickListener {
+class ShortcutsChooser extends ActivityPlus with OnItemClickListener {
   lazy val manager = getPackageManager
 
-  private final class ActionsListAdapter extends BaseAdapter {
-    private val shortcuts = getPackageManager.queryIntentActivities(new Intent(Intent.ACTION_CREATE_SHORTCUT), 0)
-      .sortWith((lhs, rhs) => TextUtils.lessThanCaseInsensitive(lhs.loadLabel(manager).toString,
-                                                                rhs.loadLabel(manager).toString))
+  private final class ShortcutsListAdapter extends BaseAdapter {
+    private val shortcuts = ShortcutsFetcher.getShortcuts(getPackageManager)
 
     override def getCount = shortcuts.size
     override def getItem(position: Int) = shortcuts(position)
@@ -44,7 +40,7 @@ class InvisibleWidgetActionsChooser extends ActivityPlus with OnItemClickListene
     }
   }
 
-  private var adapter: ActionsListAdapter = null
+  private var adapter: ShortcutsListAdapter = null
   private var widgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
   override def onCreate(icicle: Bundle) {
@@ -57,10 +53,10 @@ class InvisibleWidgetActionsChooser extends ActivityPlus with OnItemClickListene
       new ToolbarConfigurer(this, findViewById(R.id.toolbar).asInstanceOf[Toolbar], R.drawable.ic_close)
       val list = findViewById(android.R.id.list).asInstanceOf[ListView]
       Future {
-        adapter = new ActionsListAdapter
+        adapter = new ShortcutsListAdapter
         runOnUiThread {
           list.setAdapter(adapter)
-          AnimationHelper.crossFade(InvisibleWidgetActionsChooser.this, findViewById(android.R.id.empty), list)
+          AnimationHelper.crossFade(ShortcutsChooser.this, findViewById(android.R.id.empty), list)
         }
       }
       list.setOnItemClickListener(this)

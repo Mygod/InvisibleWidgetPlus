@@ -2,7 +2,7 @@ package tk.mygod.invisibleWidgetPlus
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.{PackageInfo, PackageManager}
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
 import android.support.v4.view.ViewCompat
@@ -15,9 +15,7 @@ import tk.mygod.animation.AnimationHelper
 import tk.mygod.app.ActivityPlus
 import tk.mygod.net.Utils._
 import tk.mygod.support.v7.util.ToolbarConfigurer
-import tk.mygod.text.TextUtils
 
-import scala.collection.JavaConversions._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -25,30 +23,10 @@ import scala.concurrent.Future
  * @author Mygod
  */
 final class ActivitiesShortcut extends ActivityPlus with OnChildClickListener with OnItemLongClickListener {
-  private final class Package(val packageInfo : PackageInfo) {
-    val exportedActivities = if (packageInfo.activities == null) null
-      else packageInfo.activities.filter(info => info.exported && info.enabled)
-  }
-
   private final class ActivitiesExpandableListAdapter extends BaseExpandableListAdapter {
-    private val packages = getPackageManager.getInstalledPackages(PackageManager.GET_ACTIVITIES).map(new Package(_))
-      .filter(p => p.packageInfo.applicationInfo.enabled &&
-                   p.exportedActivities != null && p.exportedActivities.length > 0)
-      .sortWith((lhs, rhs) => {
-        val manager = getPackageManager
-        TextUtils.lessThanCaseInsensitive(lhs.packageInfo.applicationInfo.loadLabel(manager).toString,
-                                          rhs.packageInfo.applicationInfo.loadLabel(manager).toString)
-      })
-    val activitiesCounts = new Array[Int](packages.size + 1);
-    {
-      var i = 1
-      var j = 0
-      for (p <- packages) {
-        activitiesCounts(i) = activitiesCounts(j) + p.exportedActivities.size
-        j = i
-        i += 1
-      }
-    }
+    ActivitiesFetcher.init(getPackageManager)
+    private val packages = ActivitiesFetcher.packages
+    val activitiesCounts = ActivitiesFetcher.activitiesCounts
 
     override def getChildId(groupPosition: Int, childPosition: Int) = activitiesCounts(groupPosition) + childPosition
     override def getChild(groupPosition: Int, childPosition: Int) =
