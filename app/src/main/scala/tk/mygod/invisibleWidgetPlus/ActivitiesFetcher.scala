@@ -21,8 +21,8 @@ private object ActivitiesFetcher {
           .filter(p => p.packageInfo.applicationInfo.enabled && p.exportedActivities != null &&
                        p.exportedActivities.length > 0)
           .sortWith((lhs, rhs) => TextUtils.lessThanCaseInsensitive(
-            lhs.packageInfo.applicationInfo.loadLabel(manager).toString,
-            rhs.packageInfo.applicationInfo.loadLabel(manager).toString))
+            lhs.packageInfo.applicationInfo.loadLabel(manager).toString, lhs.packageInfo.packageName,
+            rhs.packageInfo.applicationInfo.loadLabel(manager).toString, rhs.packageInfo.packageName))
         activitiesCounts = new Array[Int](packages.size + 1)
         var i = 1
         var j = 0

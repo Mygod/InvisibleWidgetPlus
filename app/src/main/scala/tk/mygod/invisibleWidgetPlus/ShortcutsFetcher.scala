@@ -1,7 +1,7 @@
 package tk.mygod.invisibleWidgetPlus
 
 import android.content.Intent
-import android.content.pm.{ResolveInfo, PackageManager}
+import android.content.pm.{PackageManager, ResolveInfo}
 import tk.mygod.text.TextUtils
 
 import scala.collection.JavaConversions._
@@ -16,8 +16,9 @@ private object ShortcutsFetcher {
   def getShortcuts(manager: PackageManager) = {
     synchronized {
       if (shortcuts == null) shortcuts = manager.queryIntentActivities(new Intent(Intent.ACTION_CREATE_SHORTCUT), 0)
-        .sortWith((lhs, rhs) => TextUtils.lessThanCaseInsensitive(lhs.loadLabel(manager).toString,
-                                                                  rhs.loadLabel(manager).toString))
+        .sortWith((lhs, rhs) => TextUtils.lessThanCaseInsensitive(
+          lhs.loadLabel(manager).toString, lhs.activityInfo.name,
+          rhs.loadLabel(manager).toString, rhs.activityInfo.name))
     }
     shortcuts
   }
