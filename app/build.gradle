@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId "tk.mygod.invisibleWidgetPlus"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 21
         versionCode 321
         versionName "2.1.6.321"
@@ -28,13 +28,13 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:21.0.3'
-    compile "org.scala-lang:scala-library:2.11.5"
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':mygod-lib-android')
 }

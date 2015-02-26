@@ -1,1 +1,4 @@
 include ':app'
+include 'mygod-lib-android'
+
+project(':mygod-lib-android').projectDir = new File(rootProject.projectDir, '../mygod-lib-android/lib')

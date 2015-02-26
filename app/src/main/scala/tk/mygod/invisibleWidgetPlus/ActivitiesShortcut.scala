@@ -6,15 +6,13 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
 import android.support.v4.view.ViewCompat
-import android.support.v7.widget.Toolbar
 import android.view.{View, ViewGroup}
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ExpandableListView.OnChildClickListener
 import android.widget._
 import tk.mygod.animation.AnimationHelper
-import tk.mygod.app.ActivityPlus
-import tk.mygod.net.Utils._
-import tk.mygod.support.v7.util.ToolbarConfigurer
+import tk.mygod.app.ToolbarActivity
+import tk.mygod.util.UriUtils._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -22,7 +20,7 @@ import scala.concurrent.Future
 /**
  * @author Mygod
  */
-final class ActivitiesShortcut extends ActivityPlus with OnChildClickListener with OnItemLongClickListener {
+final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener with OnItemLongClickListener {
   private final class ActivitiesExpandableListAdapter extends BaseExpandableListAdapter {
     ActivitiesFetcher.init(getPackageManager)
     private val packages = ActivitiesFetcher.packages
@@ -76,7 +74,7 @@ final class ActivitiesShortcut extends ActivityPlus with OnChildClickListener wi
   override def onCreate(icicle: Bundle) {
     super.onCreate(icicle)
     setContentView(R.layout.activities_chooser)
-    new ToolbarConfigurer(this, findViewById(R.id.toolbar).asInstanceOf[Toolbar], R.drawable.ic_close)
+    configureToolbar(R.drawable.ic_close)
     val list = findViewById(android.R.id.list).asInstanceOf[ExpandableListView]
     Future {
       adapter = new ActivitiesExpandableListAdapter()

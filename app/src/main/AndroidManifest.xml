@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tk.mygod.invisibleWidgetPlus" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+          package="tk.mygod.invisibleWidgetPlus">
 
-    <application
-        android:allowBackup="true"
-        android:icon="@drawable/invisible"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.Material.Blue" >
+    <application tools:replace="android:theme" android:allowBackup="true" android:icon="@drawable/invisible"
+                 android:label="@string/app_name" android:theme="@style/Theme.Material.Blue">
 
         <activity android:name=".ShortcutsChooser" android:label="@string/configure_label">
             <intent-filter>

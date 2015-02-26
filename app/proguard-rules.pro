@@ -19,6 +19,4 @@
 -keepnames class ** { *; }
 -ignorewarnings
 # temporary workaround; see Scala issue SI-5397
--keep class scala.collection.SeqLike {
-    public protected *;
-}
+-keep class scala.collection.SeqLike { public protected *; }

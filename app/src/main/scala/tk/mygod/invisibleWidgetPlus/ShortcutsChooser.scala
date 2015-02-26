@@ -5,13 +5,11 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v7.widget.Toolbar
 import android.view.{View, ViewGroup}
 import android.widget.AdapterView.OnItemClickListener
 import android.widget._
 import tk.mygod.animation.AnimationHelper
-import tk.mygod.app.ActivityPlus
-import tk.mygod.support.v7.util.ToolbarConfigurer
+import tk.mygod.app.ToolbarActivity
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -19,7 +17,7 @@ import scala.concurrent.Future
 /**
  * @author Mygod
  */
-class ShortcutsChooser extends ActivityPlus with OnItemClickListener {
+class ShortcutsChooser extends ToolbarActivity with OnItemClickListener {
   private final class ShortcutsListAdapter extends BaseAdapter {
     private val shortcuts = ShortcutsFetcher.getShortcuts(getPackageManager)
 
@@ -48,7 +46,7 @@ class ShortcutsChooser extends ActivityPlus with OnItemClickListener {
       widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
     if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) finish else {
       setContentView(R.layout.actions_chooser)
-      new ToolbarConfigurer(this, findViewById(R.id.toolbar).asInstanceOf[Toolbar], R.drawable.ic_close)
+      configureToolbar(R.drawable.ic_close)
       val list = findViewById(android.R.id.list).asInstanceOf[ListView]
       Future {
         adapter = new ShortcutsListAdapter
