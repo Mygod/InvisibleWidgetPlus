@@ -1,7 +1,6 @@
 package tk.mygod.invisibleWidgetPlus
 
 import android.content.pm.PackageManager
-import tk.mygod.text.TextUtils
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
@@ -20,7 +19,7 @@ private object ActivitiesFetcher {
         packages = manager.getInstalledPackages(PackageManager.GET_ACTIVITIES).map(new Package(_))
           .filter(p => p.packageInfo.applicationInfo.enabled && p.exportedActivities != null &&
                        p.exportedActivities.length > 0)
-          .sortWith((lhs, rhs) => TextUtils.lessThanCaseInsensitive(
+          .sortWith((lhs, rhs) => InvisibleWidgetManager.lessThanCaseInsensitive(
             lhs.packageInfo.applicationInfo.loadLabel(manager).toString, lhs.packageInfo.packageName,
             rhs.packageInfo.applicationInfo.loadLabel(manager).toString, rhs.packageInfo.packageName))
         activitiesCounts = new Array[Int](packages.size + 1)
