@@ -3,8 +3,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.1'
-        classpath "jp.leafytree.gradle:gradle-android-scala-plugin:1.3.2"
+        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath "jp.leafytree.gradle:gradle-android-scala-plugin:1.4"
     }
 }
 apply plugin: 'com.android.application'
@@ -15,21 +15,28 @@ repositories {
 }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion '21.1.2'
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
 
     defaultConfig {
         applicationId "tk.mygod.invisibleWidgetPlus"
         minSdkVersion 16
-        targetSdkVersion 21
-        versionCode 321
-        versionName "2.1.6.321"
+        targetSdkVersion 22
+        versionCode 341
+        versionName "2.1.7.341"
     }
     buildTypes {
+        debug {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt',
+                    'proguard-rules.debug.txt'
+            debuggable true
+        }
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
 }

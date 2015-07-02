@@ -33,7 +33,7 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
     override def isChildSelectable(groupPosition: Int, childPosition: Int) = true
     override def getGroupId(groupPosition: Int) = groupPosition
     override def getGroup(groupPosition: Int) = packages(groupPosition)
-    override def getChildrenCount(groupPosition: Int) = packages(groupPosition).exportedActivities.size
+    override def getChildrenCount(groupPosition: Int) = packages(groupPosition).exportedActivities.length
     override def hasStableIds = true
 
     override def getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View, parent: ViewGroup) = {
@@ -115,8 +115,8 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
         true
       case _ => false
     } catch {
-      case exc: Throwable =>
-        showToast(exc.getMessage)
+      case exc: Exception =>
+        makeSnackbar(exc.getMessage).show
         exc.printStackTrace()
         true
     }
