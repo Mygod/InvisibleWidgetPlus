@@ -26,7 +26,7 @@ private object ActivitiesFetcher {
         var i = 1
         var j = 0
         for (p <- packages) {
-          activitiesCounts(i) = activitiesCounts(j) + p.exportedActivities.size
+          activitiesCounts(i) = activitiesCounts(j) + p.exportedActivities.length
           j = i
           i += 1
         }

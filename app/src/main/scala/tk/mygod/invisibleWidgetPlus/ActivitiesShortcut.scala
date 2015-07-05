@@ -10,9 +10,9 @@ import android.view.{View, ViewGroup}
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ExpandableListView.OnChildClickListener
 import android.widget._
-import tk.mygod.animation.AnimationHelper
 import tk.mygod.app.ToolbarActivity
 import tk.mygod.util.UriUtils._
+import tk.mygod.view.AnimationHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

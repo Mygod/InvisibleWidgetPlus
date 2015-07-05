@@ -8,8 +8,8 @@ import android.preference.PreferenceManager
 import android.view.{View, ViewGroup}
 import android.widget.AdapterView.OnItemClickListener
 import android.widget._
-import tk.mygod.animation.AnimationHelper
 import tk.mygod.app.ToolbarActivity
+import tk.mygod.view.AnimationHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
