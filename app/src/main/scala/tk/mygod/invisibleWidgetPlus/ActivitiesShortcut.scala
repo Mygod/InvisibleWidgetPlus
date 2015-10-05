@@ -11,6 +11,7 @@ import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ExpandableListView.OnChildClickListener
 import android.widget._
 import tk.mygod.app.ToolbarActivity
+import tk.mygod.util.MetricsUtils
 import tk.mygod.util.UriUtils._
 import tk.mygod.view.AnimationHelper
 
@@ -39,9 +40,8 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
     override def getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View, parent: ViewGroup) = {
       val result = if (convertView == null) getLayoutInflater.inflate(R.layout.icon_list_item_2, parent, false)
         else convertView
-      val startPadding = (28 * getResources.getDisplayMetrics.density + 0.5).toInt
-      val endPadding = (4 * getResources.getDisplayMetrics.density + 0.5).toInt
-      ViewCompat.setPaddingRelative(result, startPadding, 0, endPadding, 0)
+      ViewCompat.setPaddingRelative(result, MetricsUtils.dp2px(ActivitiesShortcut.this, 28), 0,
+        MetricsUtils.dp2px(ActivitiesShortcut.this, 4), 0)
       val info = packages(groupPosition).packageInfo
       val manager = getPackageManager
       result.findViewById(android.R.id.icon).asInstanceOf[ImageView]
@@ -56,9 +56,8 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
       val result = if (convertView == null) getLayoutInflater.inflate(R.layout.icon_list_item_2, parent, false)
         else convertView
       result.setBackgroundResource(R.color.background_darker)
-      val startPadding = (56 * getResources.getDisplayMetrics.density + 0.5).toInt
-      val endPadding = (4 * getResources.getDisplayMetrics.density + 0.5).toInt
-      ViewCompat.setPaddingRelative(result, startPadding, 0, endPadding, 0)
+      ViewCompat.setPaddingRelative(result, MetricsUtils.dp2px(ActivitiesShortcut.this, 56), 0,
+        MetricsUtils.dp2px(ActivitiesShortcut.this, 4), 0)
       val info = packages(groupPosition).exportedActivities(childPosition)
       val manager = getPackageManager
       result.findViewById(android.R.id.icon).asInstanceOf[ImageView].setImageDrawable(info.loadIcon(manager))

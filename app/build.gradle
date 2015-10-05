@@ -11,12 +11,12 @@ apply plugin: 'com.android.application'
 apply plugin: "jp.leafytree.android-scala"
 
 repositories {
-        mavenCentral()
+    mavenCentral()
 }
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.0'
+    buildToolsVersion '23.0.1'
 
     defaultConfig {
         applicationId "tk.mygod.invisibleWidgetPlus"
@@ -44,4 +44,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':mygod-lib-android')
+}
+
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.additionalParameters = ["-Xexperimental"]
 }
