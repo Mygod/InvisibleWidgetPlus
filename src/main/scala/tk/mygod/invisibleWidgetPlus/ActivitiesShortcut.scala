@@ -27,17 +27,16 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
     private val packages = ActivitiesFetcher.packages
     val activitiesCounts = ActivitiesFetcher.activitiesCounts
 
-    override def getChildId(groupPosition: Int, childPosition: Int) = activitiesCounts(groupPosition) + childPosition
-    override def getChild(groupPosition: Int, childPosition: Int) =
-      packages(groupPosition).exportedActivities(childPosition)
-    override def getGroupCount = packages.size
-    override def isChildSelectable(groupPosition: Int, childPosition: Int) = true
-    override def getGroupId(groupPosition: Int) = groupPosition
-    override def getGroup(groupPosition: Int) = packages(groupPosition)
-    override def getChildrenCount(groupPosition: Int) = packages(groupPosition).exportedActivities.length
-    override def hasStableIds = true
+    def getChildId(groupPosition: Int, childPosition: Int) = activitiesCounts(groupPosition) + childPosition
+    def getChild(groupPosition: Int, childPosition: Int) = packages(groupPosition).exportedActivities(childPosition)
+    def getGroupCount = packages.size
+    def isChildSelectable(groupPosition: Int, childPosition: Int) = true
+    def getGroupId(groupPosition: Int) = groupPosition
+    def getGroup(groupPosition: Int) = packages(groupPosition)
+    def getChildrenCount(groupPosition: Int) = packages(groupPosition).exportedActivities.length
+    def hasStableIds = true
 
-    override def getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View, parent: ViewGroup) = {
+    def getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View, parent: ViewGroup) = {
       val result = if (convertView == null) getLayoutInflater.inflate(R.layout.icon_list_item_2, parent, false)
         else convertView
       ViewCompat.setPaddingRelative(result, MetricsUtils.dp2px(ActivitiesShortcut.this, 28), 0,
@@ -51,8 +50,8 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
       result
     }
 
-    override def getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View,
-                              parent: ViewGroup) = {
+    def getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View,
+                     parent: ViewGroup) = {
       val result = if (convertView == null) getLayoutInflater.inflate(R.layout.icon_list_item_2, parent, false)
         else convertView
       result.setBackgroundResource(R.color.background_darker)
@@ -86,7 +85,7 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
     list.setOnItemLongClickListener(this)
   }
 
-  override def onChildClick(parent: ExpandableListView, v: View, groupPosition: Int, childPosition: Int, id: Long) = {
+  def onChildClick(parent: ExpandableListView, v: View, groupPosition: Int, childPosition: Int, id: Long) = {
     val info = adapter.getChild(groupPosition, childPosition)
     try setResult(Activity.RESULT_OK, new Intent()
       .putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent().setClassName(info.packageName, info.name))
@@ -100,7 +99,7 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
     true
   }
 
-  override def onItemLongClick(parent: AdapterView[_], view: View, position: Int, id: Long) = {
+  def onItemLongClick(parent: AdapterView[_], view: View, position: Int, id: Long) = {
     val groupPosition = ExpandableListView.getPackedPositionGroup(id)
     try ExpandableListView.getPackedPositionType(id) match {
       case ExpandableListView.PACKED_POSITION_TYPE_GROUP =>

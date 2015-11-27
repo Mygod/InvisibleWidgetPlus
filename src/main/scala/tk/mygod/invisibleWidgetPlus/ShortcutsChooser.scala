@@ -21,10 +21,10 @@ class ShortcutsChooser extends ToolbarActivity with OnItemClickListener {
   private final class ShortcutsListAdapter extends BaseAdapter {
     private val shortcuts = ShortcutsFetcher.getShortcuts(getPackageManager)
 
-    override def getCount = shortcuts.size
-    override def getItem(position: Int) = shortcuts(position)
-    override def getItemId(position: Int) = position
-    override def getView(position: Int, convertView: View, parent: ViewGroup) = {
+    def getCount = shortcuts.size
+    def getItem(position: Int) = shortcuts(position)
+    def getItemId(position: Int) = position
+    def getView(position: Int, convertView: View, parent: ViewGroup) = {
       val result = if (convertView == null) getLayoutInflater.inflate(R.layout.icon_list_item_2, parent, false)
         else convertView
       val manager = getPackageManager
@@ -59,7 +59,7 @@ class ShortcutsChooser extends ToolbarActivity with OnItemClickListener {
     }
   }
 
-  override def onItemClick(parent: AdapterView[_], view: View, position: Int, id: Long) {
+  def onItemClick(parent: AdapterView[_], view: View, position: Int, id: Long) {
     val info = adapter.getItem(position).activityInfo
     startActivityForResult(new Intent(Intent.ACTION_CREATE_SHORTCUT).setClassName(info.packageName, info.name)
       .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId), position)
