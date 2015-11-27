@@ -17,3 +17,41 @@ shrinkResources in Android := true
 resolvers += Resolver.sonatypeRepo("public")
 
 libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "1.3.3-SNAPSHOT"
+
+proguardConfig in Android := List("-dontobfuscate",
+  "-dontoptimize",
+  "-renamesourcefileattribute SourceFile",
+  "-keepattributes SourceFile,LineNumberTable",
+  "-verbose",
+  "-flattenpackagehierarchy",
+  "-dontusemixedcaseclassnames",
+  "-dontskipnonpubliclibraryclasses",
+  "-dontpreverify",
+  "-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*,!code/allocation/variable",
+  "-keepattributes *Annotation*",
+  "-dontnote android.annotation.**",
+  "-dontwarn android.support.**",
+  "-dontnote android.support.**",
+  "-dontnote scala.ScalaObject",
+  "-dontnote org.xml.sax.EntityResolver",
+  "-dontnote scala.concurrent.forkjoin.**",
+  "-dontwarn scala.beans.ScalaBeanInfo",
+  "-dontwarn scala.concurrent.**",
+  "-dontnote scala.reflect.**",
+  "-dontwarn scala.reflect.**",
+  "-dontwarn scala.sys.process.package$",
+  "-dontwarn **$$anonfun$*",
+  "-dontwarn scala.collection.immutable.RedBlack$Empty",
+  "-dontwarn scala.tools.**,plugintemplate.**",
+
+  "-keep class scala.collection.SeqLike { public java.lang.String toString(); }",
+
+  "-keep class android.support.v7.widget.FitWindowsLinearLayout { <init>(...); }",
+  "-keep class android.support.v7.widget.Toolbar { <init>(...); }",
+  "-keep class android.support.v7.widget.ViewStubCompat { <init>(...); }",
+
+  "-keep class tk.mygod.invisibleWidgetPlus.ActivitiesShortcut { <init>(...); }",
+  "-keep class tk.mygod.invisibleWidgetPlus.DoNothingShortcut { <init>(...); }",
+  "-keep class tk.mygod.invisibleWidgetPlus.InvisibleWidget { <init>(...); }",
+  "-keep class tk.mygod.invisibleWidgetPlus.ShortcutsChooser { <init>(...); }",
+  "-keep class tk.mygod.nju.portal.login.SettingsFragment { <init>(...); }")

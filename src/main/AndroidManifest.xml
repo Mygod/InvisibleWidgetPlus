@@ -5,7 +5,7 @@
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="23" />
 
     <application tools:replace="android:theme" android:allowBackup="true" android:icon="@drawable/invisible"
-                 android:label="@string/app_name" android:theme="@style/Theme.Material.Blue"
+                 android:label="@string/app_name" android:theme="@style/Theme.Material"
                  android:fullBackupContent="true" android:supportsRtl="true">
 
         <activity android:name=".ShortcutsChooser" android:label="@string/configure_label">
@@ -21,7 +21,7 @@
         </activity>
 
         <activity android:name=".DoNothingShortcut" android:label="@string/action_do_nothing"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar">
+                  android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
