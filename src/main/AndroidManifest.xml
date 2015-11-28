@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-          package="tk.mygod.invisibleWidgetPlus" android:versionCode="358" android:versionName="2.1.8.358">
+          package="tk.mygod.invisibleWidgetPlus" android:versionCode="371" android:versionName="2.1.9.371">
 
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="23" />
 
