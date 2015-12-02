@@ -11,8 +11,8 @@ import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ExpandableListView.OnChildClickListener
 import android.widget._
 import tk.mygod.app.ToolbarActivity
+import tk.mygod.util.Conversions._
 import tk.mygod.util.MetricsUtils
-import tk.mygod.util.UriUtils._
 import tk.mygod.view.AnimationHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -76,10 +76,10 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
     val list = findViewById(android.R.id.list).asInstanceOf[ExpandableListView]
     Future {
       adapter = new ActivitiesExpandableListAdapter()
-      runOnUiThread {
+      runOnUiThread(() => {
         list.setAdapter(adapter)
         AnimationHelper.crossFade(ActivitiesShortcut.this, findViewById(android.R.id.empty), list)
-      }
+      })
     }
     list.setOnChildClickListener(this)
     list.setOnItemLongClickListener(this)

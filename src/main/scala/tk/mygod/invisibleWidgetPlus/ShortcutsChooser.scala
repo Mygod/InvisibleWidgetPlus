@@ -50,10 +50,10 @@ class ShortcutsChooser extends ToolbarActivity with OnItemClickListener {
       val list = findViewById(android.R.id.list).asInstanceOf[ListView]
       Future {
         adapter = new ShortcutsListAdapter
-        runOnUiThread {
+        runOnUiThread(() => {
           list.setAdapter(adapter)
           AnimationHelper.crossFade(ShortcutsChooser.this, findViewById(android.R.id.empty), list)
-        }
+        })
       }
       list.setOnItemClickListener(this)
     }
