@@ -16,7 +16,7 @@ shrinkResources in Android := true
 
 resolvers += Resolver.sonatypeRepo("public")
 
-libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "1.3.3-SNAPSHOT"
+libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "1.3.4"
 
 proguardConfig in Android := List("-dontobfuscate",
   "-dontoptimize",
