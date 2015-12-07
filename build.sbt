@@ -16,7 +16,7 @@ shrinkResources in Android := true
 
 resolvers += Resolver.sonatypeRepo("public")
 
-libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "1.3.4"
+libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "1.3.6-SNAPSHOT"
 
 proguardConfig in Android := List("-dontobfuscate",
   "-dontoptimize",
@@ -53,5 +53,6 @@ proguardConfig in Android := List("-dontobfuscate",
   "-keep class tk.mygod.invisibleWidgetPlus.ActivitiesShortcut { <init>(...); }",
   "-keep class tk.mygod.invisibleWidgetPlus.DoNothingShortcut { <init>(...); }",
   "-keep class tk.mygod.invisibleWidgetPlus.InvisibleWidget { <init>(...); }",
+  "-keep class tk.mygod.invisibleWidgetPlus.PackageListener { <init>(...); }",
   "-keep class tk.mygod.invisibleWidgetPlus.ShortcutsChooser { <init>(...); }",
   "-keep class tk.mygod.nju.portal.login.SettingsFragment { <init>(...); }")

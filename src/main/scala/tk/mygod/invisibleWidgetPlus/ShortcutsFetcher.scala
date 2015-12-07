@@ -10,7 +10,7 @@ import scala.collection.mutable
  * @author Mygod
  */
 private object ShortcutsFetcher {
-  private var shortcuts: mutable.Buffer[ResolveInfo] = null
+  var shortcuts: mutable.Buffer[ResolveInfo] = null
 
   def getShortcuts(manager: PackageManager) = {
     synchronized {
