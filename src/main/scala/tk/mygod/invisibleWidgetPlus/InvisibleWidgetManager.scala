@@ -12,8 +12,8 @@ import android.widget.RemoteViews
  * @author Mygod
  */
 object InvisibleWidgetManager {
-  private var emptyIntent: Intent = null
-  private var emptyIntentUri: String = null
+  private var emptyIntent: Intent = _
+  private var emptyIntentUri: String = _
   def getEmptyIntent(context: Context) = {
     if (emptyIntent == null) emptyIntent = new Intent(context, classOf[DoNothingShortcut])
     emptyIntent

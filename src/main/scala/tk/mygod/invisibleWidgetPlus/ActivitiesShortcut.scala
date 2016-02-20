@@ -67,7 +67,7 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
     }
   }
 
-  private var adapter: ActivitiesExpandableListAdapter = null
+  private var adapter: ActivitiesExpandableListAdapter = _
 
   override def onCreate(icicle: Bundle) {
     super.onCreate(icicle)
@@ -75,7 +75,7 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
     configureToolbar(R.drawable.ic_close)
     val list = findViewById(android.R.id.list).asInstanceOf[ExpandableListView]
     Future {
-      adapter = new ActivitiesExpandableListAdapter()
+      adapter = new ActivitiesExpandableListAdapter
       runOnUiThread(() => {
         list.setAdapter(adapter)
         AnimationHelper.crossFade(ActivitiesShortcut.this, findViewById(android.R.id.empty), list)
