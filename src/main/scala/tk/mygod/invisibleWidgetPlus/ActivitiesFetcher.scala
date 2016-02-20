@@ -1,5 +1,6 @@
 package tk.mygod.invisibleWidgetPlus
 
+import android.content.Context
 import android.content.pm.PackageManager
 
 import scala.collection.JavaConversions._
@@ -7,13 +8,15 @@ import scala.collection.mutable
 
 /**
  * Reusing cached data.
+ *
  * @author Mygod
  */
 private object ActivitiesFetcher {
   var packages: mutable.Buffer[Package] = null
   var activitiesCounts: Array[Int] = null
 
-  def init(manager: PackageManager) = synchronized(if (packages == null) {
+  def init(context: Context) = synchronized(if (packages == null) {
+    val manager = context.getPackageManager
     packages = manager.getInstalledPackages(PackageManager.GET_ACTIVITIES).map(new Package(_))
       .filter(p => p.packageInfo.applicationInfo.enabled && p.exportedActivities != null &&
         p.exportedActivities.length > 0)
@@ -28,5 +31,6 @@ private object ActivitiesFetcher {
       j = i
       i += 1
     }
+    PackageListener.init(context)
   })
 }

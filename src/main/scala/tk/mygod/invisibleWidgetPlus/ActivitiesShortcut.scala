@@ -23,7 +23,7 @@ import scala.concurrent.Future
  */
 final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener with OnItemLongClickListener {
   private final class ActivitiesExpandableListAdapter extends BaseExpandableListAdapter {
-    ActivitiesFetcher.init(getPackageManager)
+    ActivitiesFetcher.init(ActivitiesShortcut.this)
     private val packages = ActivitiesFetcher.packages
     val activitiesCounts = ActivitiesFetcher.activitiesCounts
 

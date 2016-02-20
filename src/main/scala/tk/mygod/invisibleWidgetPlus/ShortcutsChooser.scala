@@ -21,7 +21,7 @@ import scala.concurrent.Future
  */
 class ShortcutsChooser extends ToolbarActivity with OnItemClickListener with OnItemLongClickListener {
   private final class ShortcutsListAdapter extends BaseAdapter {
-    private val shortcuts = ShortcutsFetcher.getShortcuts(getPackageManager)
+    private val shortcuts = ShortcutsFetcher.getShortcuts(ShortcutsChooser.this)
 
     def getCount = shortcuts.size
     def getItem(position: Int) = shortcuts(position)
