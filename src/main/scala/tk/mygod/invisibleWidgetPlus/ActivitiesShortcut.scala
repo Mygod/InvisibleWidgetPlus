@@ -72,7 +72,8 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
   override def onCreate(icicle: Bundle) {
     super.onCreate(icicle)
     setContentView(R.layout.activities_chooser)
-    configureToolbar(R.drawable.ic_close)
+    configureToolbar
+    setNavigationIcon(R.drawable.ic_close)
     val list = findViewById(android.R.id.list).asInstanceOf[ExpandableListView]
     Future {
       adapter = new ActivitiesExpandableListAdapter

@@ -6,7 +6,7 @@ platformTarget in Android := "android-23"
 
 name := "InvisibleWidgetPlus"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
 javacOptions ++= Seq("-source", "1.6", "-target", "1.6")
 
@@ -16,7 +16,9 @@ shrinkResources in Android := true
 
 resolvers += Resolver.sonatypeRepo("public")
 
-libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "1.3.11-SNAPSHOT"
+libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "1.4.1-SNAPSHOT"
+
+proguardVersion in Android := "5.2.1"
 
 proguardConfig in Android := List("-dontobfuscate",
   "-dontoptimize",

@@ -48,7 +48,8 @@ class ShortcutsChooser extends ToolbarActivity with OnItemClickListener with OnI
       widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
     if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) finish else {
       setContentView(R.layout.actions_chooser)
-      configureToolbar(R.drawable.ic_close)
+      configureToolbar
+      setNavigationIcon(R.drawable.ic_close)
       val list = findViewById(android.R.id.list).asInstanceOf[ListView]
       Future {
         adapter = new ShortcutsListAdapter
