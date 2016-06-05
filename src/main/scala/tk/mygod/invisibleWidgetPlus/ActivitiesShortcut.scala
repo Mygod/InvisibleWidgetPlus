@@ -105,12 +105,14 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
     try ExpandableListView.getPackedPositionType(id) match {
       case ExpandableListView.PACKED_POSITION_TYPE_GROUP =>
         startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-          .setData("package:" + adapter.getGroup(groupPosition).packageInfo.packageName))
+          .setData("package:" + adapter.getGroup(groupPosition).packageInfo.packageName),
+          InvisibleWidgetManager.makeRevealAnimation(view))
         true
       case ExpandableListView.PACKED_POSITION_TYPE_CHILD =>
         val info = adapter.getChild(groupPosition,
           ExpandableListView.getPackedPositionChild(id) - adapter.activitiesCounts(groupPosition))
-        startActivity(new Intent().setClassName(info.packageName, info.name))
+        startActivity(new Intent().setClassName(info.packageName, info.name),
+          InvisibleWidgetManager.makeRevealAnimation(view))
         true
       case _ => false
     } catch {

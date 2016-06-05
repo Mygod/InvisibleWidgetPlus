@@ -7,11 +7,11 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.provider.Settings
 import android.view.{View, ViewGroup}
-import android.widget.AdapterView.{OnItemLongClickListener, OnItemClickListener}
+import android.widget.AdapterView.{OnItemClickListener, OnItemLongClickListener}
 import android.widget._
 import tk.mygod.app.ToolbarActivity
-import tk.mygod.view.AnimationHelper
 import tk.mygod.util.Conversions._
+import tk.mygod.view.AnimationHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -66,12 +66,14 @@ class ShortcutsChooser extends ToolbarActivity with OnItemClickListener with OnI
   def onItemClick(parent: AdapterView[_], view: View, position: Int, id: Long) {
     val info = adapter.getItem(position).activityInfo
     startActivityForResult(new Intent(Intent.ACTION_CREATE_SHORTCUT).setClassName(info.packageName, info.name)
-      .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId), position)
+      .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId), position,
+      InvisibleWidgetManager.makeRevealAnimation(view))
   }
 
   def onItemLongClick(parent: AdapterView[_], view: View, position: Int, id: Long) = {
     try startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-      .setData("package:" + adapter.getItem(position).activityInfo.packageName)) catch {
+      .setData("package:" + adapter.getItem(position).activityInfo.packageName),
+      InvisibleWidgetManager.makeRevealAnimation(view)) catch {
       case exc: Exception =>
         makeSnackbar(exc.getMessage).show
         exc.printStackTrace()

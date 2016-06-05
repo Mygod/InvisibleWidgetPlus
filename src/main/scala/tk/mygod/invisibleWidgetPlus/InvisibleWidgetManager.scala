@@ -2,11 +2,13 @@ package tk.mygod.invisibleWidgetPlus
 
 import java.net.URISyntaxException
 
-import android.app.PendingIntent
+import android.app.{ActivityOptions, PendingIntent}
 import android.appwidget.AppWidgetManager
-import android.content.{Intent, Context}
+import android.content.{Context, Intent}
 import android.preference.PreferenceManager
+import android.view.View
 import android.widget.RemoteViews
+import tk.mygod.os.Build
 
 /**
  * @author Mygod
@@ -43,4 +45,8 @@ object InvisibleWidgetManager {
     result = lhs2.compareToIgnoreCase(rhs2)
     if (result != 0) result < 0 else lhs2 < rhs2
   }
+
+  def makeRevealAnimation(view: View) = (if (Build.version >= 23)
+    ActivityOptions.makeClipRevealAnimation(view, 0, 0, view.getMeasuredWidth, view.getMeasuredHeight)
+  else ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getMeasuredWidth, view.getMeasuredHeight)).toBundle
 }
