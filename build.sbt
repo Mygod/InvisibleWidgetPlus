@@ -2,7 +2,7 @@ import android.Keys._
 
 android.Plugin.androidBuild
 
-platformTarget in Android := "android-23"
+platformTarget in Android := "android-24"
 
 name := "InvisibleWidgetPlus"
 
@@ -16,7 +16,7 @@ shrinkResources in Android := true
 
 resolvers += Resolver.sonatypeRepo("public")
 
-libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "1.4.1-SNAPSHOT"
+libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "1.4.3-SNAPSHOT"
 
 proguardVersion in Android := "5.2.1"
 
