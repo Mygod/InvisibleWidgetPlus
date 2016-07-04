@@ -22,6 +22,8 @@ resolvers += Resolver.sonatypeRepo("public")
 
 libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "1.4.3-SNAPSHOT"
 
+useSupportVectors
+
 proguardVersion in Android := "5.2.1"
 
 proguardConfig in Android := List("-dontobfuscate",
