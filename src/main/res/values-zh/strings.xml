@@ -5,5 +5,6 @@
     <string name="configure_label">选择操作</string>
     <string name="action_activities">活动</string>
     <string name="action_do_nothing">什么都不干</string>
+    <string name="trigger_on_double_tap">双击生效</string>
 
 </resources>

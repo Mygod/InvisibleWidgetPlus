@@ -38,8 +38,9 @@ class ShortcutsChooser extends ToolbarActivity with OnItemClickListener with OnI
     }
   }
 
-  private var adapter: ShortcutsListAdapter = null
+  private var adapter: ShortcutsListAdapter = _
   private var widgetId = AppWidgetManager.INVALID_APPWIDGET_ID
+  private var triggerOnDoubleTap: Boolean = _
 
   override def onCreate(icicle: Bundle) {
     super.onCreate(icicle)
@@ -50,6 +51,12 @@ class ShortcutsChooser extends ToolbarActivity with OnItemClickListener with OnI
       setContentView(R.layout.actions_chooser)
       configureToolbar
       setNavigationIcon(R.drawable.ic_close)
+      toolbar.inflateMenu(R.menu.actions_chooser)
+      toolbar.getMenu.getItem(0).setOnMenuItemClickListener(item => {
+        triggerOnDoubleTap = !item.isChecked
+        item.setChecked(triggerOnDoubleTap)
+        true
+      })
       val list = findViewById(android.R.id.list).asInstanceOf[ListView]
       Future {
         adapter = new ShortcutsListAdapter
@@ -86,12 +93,12 @@ class ShortcutsChooser extends ToolbarActivity with OnItemClickListener with OnI
       super.onActivityResult(requestCode, resultCode, data)
     else {
       val uri = data.getExtras.get(Intent.EXTRA_SHORTCUT_INTENT).asInstanceOf[Intent].toUri(0)
-      if (!InvisibleWidgetManager.getEmptyIntentUri(this).equals(uri)) {
-        val editor = PreferenceManager.getDefaultSharedPreferences(this).edit
-        editor.putString(Integer.toString(widgetId), uri)
-        editor.apply
-        InvisibleWidgetManager.update(this, AppWidgetManager.getInstance(this), widgetId)
-      }
+      val editor = PreferenceManager.getDefaultSharedPreferences(this).edit
+      val id = Integer.toString(widgetId)
+      if (!InvisibleWidgetManager.getEmptyIntentUri(this).equals(uri))
+        editor.putString(id, uri).putBoolean(id + "_double", true) else editor.remove(id)
+      editor.apply
+      InvisibleWidgetManager.update(this, AppWidgetManager.getInstance(this), widgetId)
       setResult(Activity.RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId))
       finish
     }

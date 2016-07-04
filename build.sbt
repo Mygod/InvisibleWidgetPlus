@@ -51,6 +51,7 @@ proguardConfig in Android := List("-dontobfuscate",
 
   "-keep class scala.collection.SeqLike { public java.lang.String toString(); }",
 
+  "-keep class android.support.v7.view.menu.ListMenuItemView { <init>(...); }",
   "-keep class android.support.v7.widget.FitWindowsLinearLayout { <init>(...); }",
   "-keep class android.support.v7.widget.Toolbar { <init>(...); }",
   "-keep class android.support.v7.widget.ViewStubCompat { <init>(...); }",
