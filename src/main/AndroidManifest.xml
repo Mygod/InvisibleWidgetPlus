@@ -4,9 +4,9 @@
 
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="24" />
 
-    <application android:allowBackup="true" android:icon="@drawable/invisible"
+    <application android:allowBackup="false" android:icon="@drawable/invisible"
                  android:label="@string/app_name" android:theme="@style/Theme.Material"
-                 android:fullBackupContent="@xml/backup_scheme" android:supportsRtl="true">
+                 android:supportsRtl="true">
 
         <activity android:name=".ShortcutsChooser" android:label="@string/configure_label">
             <intent-filter>
@@ -30,7 +30,6 @@
         <receiver android:name=".InvisibleWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
                 <action android:name="tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.ACTION_TAP" />
             </intent-filter>
 

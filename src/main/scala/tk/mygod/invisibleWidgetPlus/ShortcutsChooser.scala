@@ -4,7 +4,6 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.provider.Settings
 import android.view.{View, ViewGroup}
 import android.widget.AdapterView.{OnItemClickListener, OnItemLongClickListener}
@@ -90,15 +89,16 @@ class ShortcutsChooser extends ToolbarActivity with OnItemClickListener with OnI
 
   protected override def onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
     if (resultCode != Activity.RESULT_OK || requestCode < 0 || requestCode >= adapter.getCount)
-      super.onActivityResult(requestCode, resultCode, data)
-    else {
+      super.onActivityResult(requestCode, resultCode, data) else {
+      val awm = AppWidgetManager.getInstance(this)
       val uri = data.getExtras.get(Intent.EXTRA_SHORTCUT_INTENT).asInstanceOf[Intent].toUri(0)
-      val editor = PreferenceManager.getDefaultSharedPreferences(this).edit
-      val id = Integer.toString(widgetId)
-      if (!InvisibleWidgetManager.getEmptyIntentUri(this).equals(uri))
-        editor.putString(id, uri).putBoolean(id + "_double", true) else editor.remove(id)
-      editor.apply
-      InvisibleWidgetManager.update(this, AppWidgetManager.getInstance(this), widgetId)
+      if (uri != InvisibleWidgetManager.getEmptyIntentUri(this)) {
+        val options = awm.getAppWidgetOptions(widgetId)
+        options.putString("uri", uri)
+        options.putBoolean("double", true)
+        awm.updateAppWidgetOptions(widgetId, options)
+      }
+      InvisibleWidgetManager.update(this, awm, widgetId)
       setResult(Activity.RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId))
       finish
     }

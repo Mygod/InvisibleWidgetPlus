@@ -6,7 +6,6 @@ import android.app.{ActivityOptions, PendingIntent}
 import android.appwidget.AppWidgetManager
 import android.content.{Context, Intent}
 import android.os.Handler
-import android.preference.PreferenceManager
 import android.view.View
 import android.widget.RemoteViews
 import tk.mygod.os.Build
@@ -31,28 +30,27 @@ object InvisibleWidgetManager {
     emptyIntentUri
   }
 
-  def update(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) = {
-    val pref = PreferenceManager.getDefaultSharedPreferences(context)
-    val id = appWidgetId.toString
-    val uri = pref.getString(id, "")
+  def update(context: Context, awm: AppWidgetManager, appWidgetId: Int) = {
+    val options = awm.getAppWidgetOptions(appWidgetId)
+    val uri = options.getString("uri", "")
     if (!uri.isEmpty) {
       val views = new RemoteViews(context.getPackageName, R.layout.invisible_widget)
-      try views.setOnClickPendingIntent(R.id.button, if (pref.getBoolean(id + "_double", false))
+      try views.setOnClickPendingIntent(R.id.button, if (options.getBoolean("double", false))
         PendingIntent.getBroadcast(context, 0,
           new Intent(context, classOf[InvisibleWidget]).setAction(ACTION_TAP).putExtra(EXTRA_ID, appWidgetId), 0)
         else PendingIntent.getActivity(context, 0, Intent.parseUri(uri, 0), 0))
       catch {
         case e: URISyntaxException => e.printStackTrace // seriously though, you really shouldn't reach this point
       }
-      appWidgetManager.updateAppWidget(appWidgetId, views)
+      awm.updateAppWidget(appWidgetId, views)
     }
   }
 
   lazy val handler = new Handler
   val tapped = new mutable.HashSet[Int]
   def tap(context: Context, id: Int) = if (tapped.add(id)) handler.postDelayed(() => tapped.remove(id), 500)
-    else context.startActivity(Intent.parseUri(PreferenceManager.getDefaultSharedPreferences(context)
-      .getString(id.toString, ""), 0).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    else context.startActivity(Intent.parseUri(AppWidgetManager.getInstance(context).getAppWidgetOptions(id)
+      .getString("uri", ""), 0).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 
   def lessThanCaseInsensitive(lhs1: String, lhs2: String, rhs1: String, rhs2: String): Boolean = {
     var result = lhs1.compareToIgnoreCase(rhs1)
