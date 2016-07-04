@@ -12,7 +12,11 @@ javacOptions ++= Seq("-source", "1.6", "-target", "1.6")
 
 scalacOptions ++= Seq("-target:jvm-1.6", "-Xexperimental")
 
+typedResources in Android := false
+
 shrinkResources in Android := true
+
+resConfigs in Android := Seq("zh")
 
 resolvers += Resolver.sonatypeRepo("public")
 
