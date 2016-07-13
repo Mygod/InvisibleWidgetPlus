@@ -5,10 +5,11 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.support.v4.app.ActivityOptionsCompat
 import android.view.{View, ViewGroup}
 import android.widget.AdapterView.{OnItemClickListener, OnItemLongClickListener}
 import android.widget._
-import tk.mygod.app.ToolbarActivity
+import tk.mygod.app.{CircularRevealActivity, LocationObservedActivity, ToolbarActivity}
 import tk.mygod.util.Conversions._
 import tk.mygod.view.AnimationHelper
 
@@ -18,7 +19,8 @@ import scala.concurrent.Future
 /**
  * @author Mygod
  */
-class ShortcutsChooser extends ToolbarActivity with OnItemClickListener with OnItemLongClickListener {
+class ShortcutsChooser extends ToolbarActivity with LocationObservedActivity
+  with OnItemClickListener with OnItemLongClickListener {
   private final class ShortcutsListAdapter extends BaseAdapter {
     private val shortcuts = ShortcutsFetcher.getShortcuts(ShortcutsChooser.this)
 
@@ -48,7 +50,7 @@ class ShortcutsChooser extends ToolbarActivity with OnItemClickListener with OnI
       widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
     if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) finish else {
       setContentView(R.layout.actions_chooser)
-      configureToolbar
+      configureToolbar()
       setNavigationIcon(R.drawable.ic_close)
       toolbar.inflateMenu(R.menu.actions_chooser)
       toolbar.getMenu.getItem(0).setOnMenuItemClickListener(item => {
@@ -71,9 +73,12 @@ class ShortcutsChooser extends ToolbarActivity with OnItemClickListener with OnI
 
   def onItemClick(parent: AdapterView[_], view: View, position: Int, id: Long) {
     val info = adapter.getItem(position).activityInfo
-    startActivityForResult(new Intent(Intent.ACTION_CREATE_SHORTCUT).setClassName(info.packageName, info.name)
-      .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId), position,
-      InvisibleWidgetManager.makeRevealAnimation(view))
+    val intent = new Intent(Intent.ACTION_CREATE_SHORTCUT).setClassName(info.packageName, info.name)
+      .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+    if (info.packageName == getPackageName)
+      startActivityForResult(CircularRevealActivity.putLocation(intent, getLocationOnScreen), position,
+        ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle)
+    else startActivityForResult(intent, position, InvisibleWidgetManager.makeRevealAnimation(view))
   }
 
   def onItemLongClick(parent: AdapterView[_], view: View, position: Int, id: Long) = {

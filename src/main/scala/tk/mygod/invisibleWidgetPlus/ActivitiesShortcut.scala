@@ -10,7 +10,7 @@ import android.view.{View, ViewGroup}
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ExpandableListView.OnChildClickListener
 import android.widget._
-import tk.mygod.app.ToolbarActivity
+import tk.mygod.app.{CircularRevealActivity, ToolbarActivity}
 import tk.mygod.util.Conversions._
 import tk.mygod.util.MetricsUtils
 import tk.mygod.view.AnimationHelper
@@ -21,7 +21,8 @@ import scala.concurrent.Future
 /**
  * @author Mygod
  */
-final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener with OnItemLongClickListener {
+final class ActivitiesShortcut extends ToolbarActivity with CircularRevealActivity
+  with OnChildClickListener with OnItemLongClickListener {
   private final class ActivitiesExpandableListAdapter extends BaseExpandableListAdapter {
     ActivitiesFetcher.init(ActivitiesShortcut.this)
     private val packages = ActivitiesFetcher.packages
@@ -72,7 +73,7 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
   override def onCreate(icicle: Bundle) {
     super.onCreate(icicle)
     setContentView(R.layout.activities_chooser)
-    configureToolbar
+    configureToolbar()
     setNavigationIcon(R.drawable.ic_close)
     val list = findViewById(android.R.id.list).asInstanceOf[ExpandableListView]
     Future {
@@ -96,7 +97,7 @@ final class ActivitiesShortcut extends ToolbarActivity with OnChildClickListener
     catch {
       case e: PackageManager.NameNotFoundException => e.printStackTrace() // how is this possible though
     }
-    finish
+    supportFinishAfterTransition()
     true
   }
 

@@ -1,8 +1,6 @@
-import android.Keys._
-
 android.Plugin.androidBuild
 
-platformTarget in Android := "android-24"
+platformTarget := "android-24"
 
 name := "InvisibleWidgetPlus"
 
@@ -12,19 +10,23 @@ javacOptions ++= Seq("-source", "1.6", "-target", "1.6")
 
 scalacOptions ++= Seq("-target:jvm-1.6", "-Xexperimental")
 
-typedResources in Android := false
+typedResources := false
 
-shrinkResources in Android := true
+typedViewHolders := false
 
-resConfigs in Android := Seq("zh")
+shrinkResources := true
+
+resConfigs := Seq("zh")
 
 resolvers += Resolver.sonatypeRepo("public")
 
-libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "1.4.3-SNAPSHOT"
+libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "2.0.1-SNAPSHOT"
 
 useSupportVectors
 
 proguardVersion in Android := "5.2.1"
+
+proguardCache := Seq()
 
 proguardConfig in Android := List("-dontobfuscate",
   "-dontoptimize",
