@@ -61,7 +61,10 @@ object InvisibleWidgetManager {
     if (result != 0) result < 0 else lhs2 < rhs2
   }
 
-  def makeRevealAnimation(activity: Activity, view: View) = (if (Build.version >= 21)
-    ActivityOptions.makeSceneTransitionAnimation(activity)  // todo: detect?
+  def makeRevealAnimation(view: View) = (if (Build.version >= 23)
+    ActivityOptions.makeClipRevealAnimation(view, 0, 0, view.getMeasuredWidth, view.getMeasuredHeight)
+  else ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getMeasuredWidth, view.getMeasuredHeight)).toBundle
+  def makeLocalRevealAnimation(activity: Activity, view: View) = (if (Build.version >= 21)
+    ActivityOptions.makeSceneTransitionAnimation(activity)
   else ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getMeasuredWidth, view.getMeasuredHeight)).toBundle
 }
