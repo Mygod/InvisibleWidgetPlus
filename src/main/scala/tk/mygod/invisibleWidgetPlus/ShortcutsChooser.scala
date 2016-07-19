@@ -78,13 +78,13 @@ class ShortcutsChooser extends ToolbarActivity with LocationObservedActivity
     if (info.packageName == getPackageName)
       startActivityForResult(CircularRevealActivity.putLocation(intent, getLocationOnScreen), position,
         ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle)
-    else startActivityForResult(intent, position, InvisibleWidgetManager.makeRevealAnimation(view))
+    else startActivityForResult(intent, position, InvisibleWidgetManager.makeRevealAnimation(this, view))
   }
 
   def onItemLongClick(parent: AdapterView[_], view: View, position: Int, id: Long) = {
     try startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
       .setData("package:" + adapter.getItem(position).activityInfo.packageName),
-      InvisibleWidgetManager.makeRevealAnimation(view)) catch {
+      InvisibleWidgetManager.makeRevealAnimation(this, view)) catch {
       case exc: Exception =>
         makeSnackbar(exc.getMessage).show
         exc.printStackTrace()
@@ -100,7 +100,7 @@ class ShortcutsChooser extends ToolbarActivity with LocationObservedActivity
       if (uri != InvisibleWidgetManager.getEmptyIntentUri(this)) {
         val options = awm.getAppWidgetOptions(widgetId)
         options.putString("uri", uri)
-        options.putBoolean("double", true)
+        options.putBoolean("double", triggerOnDoubleTap)
         awm.updateAppWidgetOptions(widgetId, options)
       }
       InvisibleWidgetManager.update(this, awm, widgetId)

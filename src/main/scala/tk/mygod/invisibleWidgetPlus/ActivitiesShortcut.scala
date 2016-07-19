@@ -105,15 +105,15 @@ final class ActivitiesShortcut extends ToolbarActivity with CircularRevealActivi
     val groupPosition = ExpandableListView.getPackedPositionGroup(id)
     try ExpandableListView.getPackedPositionType(id) match {
       case ExpandableListView.PACKED_POSITION_TYPE_GROUP =>
-        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-          .setData("package:" + adapter.getGroup(groupPosition).packageInfo.packageName),
-          InvisibleWidgetManager.makeRevealAnimation(view))
+        startActivity(CircularRevealActivity.putLocation(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+          .setData("package:" + adapter.getGroup(groupPosition).packageInfo.packageName), getLocationOnScreen),
+          InvisibleWidgetManager.makeRevealAnimation(this, view))
         true
       case ExpandableListView.PACKED_POSITION_TYPE_CHILD =>
         val info = adapter.getChild(groupPosition,
           ExpandableListView.getPackedPositionChild(id) - adapter.activitiesCounts(groupPosition))
-        startActivity(new Intent().setClassName(info.packageName, info.name),
-          InvisibleWidgetManager.makeRevealAnimation(view))
+        startActivity(CircularRevealActivity.putLocation(new Intent, getLocationOnScreen)
+          .setClassName(info.packageName, info.name), InvisibleWidgetManager.makeRevealAnimation(this, view))
         true
       case _ => false
     } catch {

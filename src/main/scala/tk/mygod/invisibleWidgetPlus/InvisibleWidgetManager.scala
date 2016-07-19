@@ -2,7 +2,7 @@ package tk.mygod.invisibleWidgetPlus
 
 import java.net.URISyntaxException
 
-import android.app.{ActivityOptions, PendingIntent}
+import android.app.{Activity, ActivityOptions, PendingIntent}
 import android.appwidget.AppWidgetManager
 import android.content.{Context, Intent}
 import android.os.Handler
@@ -18,6 +18,7 @@ import scala.collection.mutable
 object InvisibleWidgetManager {
   final val ACTION_TAP = "tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.ACTION_TAP"
   final val EXTRA_ID = "tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.EXTRA_ID"
+  final val EXTRA_URI = "tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.EXTRA_URI"
 
   private var emptyIntent: Intent = _
   private var emptyIntentUri: String = _
@@ -36,8 +37,8 @@ object InvisibleWidgetManager {
     if (!uri.isEmpty) {
       val views = new RemoteViews(context.getPackageName, R.layout.invisible_widget)
       try views.setOnClickPendingIntent(R.id.button, if (options.getBoolean("double", false))
-        PendingIntent.getBroadcast(context, 0,
-          new Intent(context, classOf[InvisibleWidget]).setAction(ACTION_TAP).putExtra(EXTRA_ID, appWidgetId), 0)
+        PendingIntent.getBroadcast(context, 0, new Intent(context, classOf[InvisibleWidget]).setAction(ACTION_TAP)
+          .putExtra(EXTRA_ID, appWidgetId).putExtra(EXTRA_URI, options.getString("uri")), 0)
         else PendingIntent.getActivity(context, 0, Intent.parseUri(uri, 0), 0))
       catch {
         case e: URISyntaxException => e.printStackTrace // seriously though, you really shouldn't reach this point
@@ -48,9 +49,8 @@ object InvisibleWidgetManager {
 
   lazy val handler = new Handler
   val tapped = new mutable.HashSet[Int]
-  def tap(context: Context, id: Int) = if (tapped.add(id)) handler.postDelayed(() => tapped.remove(id), 500)
-    else context.startActivity(Intent.parseUri(AppWidgetManager.getInstance(context).getAppWidgetOptions(id)
-      .getString("uri", ""), 0).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+  def tap(context: Context, id: Int, uri: String) = if (tapped.add(id)) handler.postDelayed(() => tapped.remove(id), 500)
+    else context.startActivity(Intent.parseUri(uri, 0).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 
   def lessThanCaseInsensitive(lhs1: String, lhs2: String, rhs1: String, rhs2: String): Boolean = {
     var result = lhs1.compareToIgnoreCase(rhs1)
@@ -61,7 +61,7 @@ object InvisibleWidgetManager {
     if (result != 0) result < 0 else lhs2 < rhs2
   }
 
-  def makeRevealAnimation(view: View) = (if (Build.version >= 23)
-    ActivityOptions.makeClipRevealAnimation(view, 0, 0, view.getMeasuredWidth, view.getMeasuredHeight)
+  def makeRevealAnimation(activity: Activity, view: View) = (if (Build.version >= 21)
+    ActivityOptions.makeSceneTransitionAnimation(activity)  // todo: detect?
   else ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getMeasuredWidth, view.getMeasuredHeight)).toBundle
 }
