@@ -5,7 +5,6 @@ import java.net.URISyntaxException
 import android.app.{Activity, ActivityOptions, PendingIntent}
 import android.appwidget.AppWidgetManager
 import android.content.{Context, Intent}
-import android.os.Handler
 import android.view.View
 import android.widget.RemoteViews
 import tk.mygod.os.Build
@@ -47,10 +46,16 @@ object InvisibleWidgetManager {
     }
   }
 
-  lazy val handler = new Handler
-  val tapped = new mutable.HashSet[Int]
-  def tap(context: Context, id: Int, uri: String) = if (tapped.add(id)) handler.postDelayed(() => tapped.remove(id), 500)
-    else context.startActivity(Intent.parseUri(uri, 0).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+  val tapped = new mutable.HashMap[Int, Long]
+  def tap(context: Context, id: Int, uri: String) {
+    val now = System.currentTimeMillis
+    tapped.get(id) match {
+      case Some(last) if now - last < 500 =>
+        context.startActivity(Intent.parseUri(uri, 0).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+      case _ =>
+    }
+    tapped(id) = now
+  }
 
   def lessThanCaseInsensitive(lhs1: String, lhs2: String, rhs1: String, rhs2: String): Boolean = {
     var result = lhs1.compareToIgnoreCase(rhs1)
