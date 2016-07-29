@@ -16,7 +16,6 @@ import scala.collection.mutable
  */
 object InvisibleWidgetManager {
   final val ACTION_TAP = "tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.ACTION_TAP"
-  final val EXTRA_ID = "tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.EXTRA_ID"
   final val EXTRA_URI = "tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.EXTRA_URI"
 
   private var emptyIntent: Intent = _
@@ -36,8 +35,8 @@ object InvisibleWidgetManager {
     if (!uri.isEmpty) {
       val views = new RemoteViews(context.getPackageName, R.layout.invisible_widget)
       try views.setOnClickPendingIntent(R.id.button, if (options.getBoolean("double", false))
-        PendingIntent.getBroadcast(context, 0, new Intent(context, classOf[InvisibleWidget]).setAction(ACTION_TAP)
-          .putExtra(EXTRA_ID, appWidgetId).putExtra(EXTRA_URI, options.getString("uri")), 0)
+        PendingIntent.getBroadcast(context, 0, new Intent(context, classOf[InvisibleWidget])
+          .putExtra(EXTRA_URI, options.getString("uri")), 0)
         else PendingIntent.getActivity(context, 0, Intent.parseUri(uri, 0), 0))
       catch {
         case e: URISyntaxException => e.printStackTrace // seriously though, you really shouldn't reach this point
@@ -46,15 +45,15 @@ object InvisibleWidgetManager {
     }
   }
 
-  val tapped = new mutable.HashMap[Int, Long]
-  def tap(context: Context, id: Int, uri: String) {
+  val tapped = new mutable.HashMap[String, Long]
+  def tap(context: Context, uri: String) {
     val now = System.currentTimeMillis
-    tapped.get(id) match {
+    tapped.get(uri) match {
       case Some(last) if now - last < 500 =>
         context.startActivity(Intent.parseUri(uri, 0).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
       case _ =>
     }
-    tapped(id) = now
+    tapped(uri) = now
   }
 
   def lessThanCaseInsensitive(lhs1: String, lhs2: String, rhs1: String, rhs2: String): Boolean = {

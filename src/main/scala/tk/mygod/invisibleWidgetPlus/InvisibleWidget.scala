@@ -8,8 +8,8 @@ import android.content.{Context, Intent}
  */
 final class InvisibleWidget extends AppWidgetProvider {
   override def onReceive(context: Context, intent: Intent) = intent.getAction match {
-    case InvisibleWidgetManager.ACTION_TAP => InvisibleWidgetManager.tap(context,
-      intent.getIntExtra(InvisibleWidgetManager.EXTRA_ID, -1), intent.getStringExtra(InvisibleWidgetManager.EXTRA_URI))
+    case InvisibleWidgetManager.ACTION_TAP =>
+      InvisibleWidgetManager.tap(context, intent.getStringExtra(InvisibleWidgetManager.EXTRA_URI))
     case _ => super.onReceive(context, intent)
   }
 
