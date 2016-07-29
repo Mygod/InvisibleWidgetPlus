@@ -5,6 +5,7 @@ import java.net.URISyntaxException
 import android.app.{Activity, ActivityOptions, PendingIntent}
 import android.appwidget.AppWidgetManager
 import android.content.{Context, Intent}
+import android.net.Uri
 import android.view.View
 import android.widget.RemoteViews
 import tk.mygod.os.Build
@@ -16,7 +17,6 @@ import scala.collection.mutable
  */
 object InvisibleWidgetManager {
   final val ACTION_TAP = "tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.ACTION_TAP"
-  final val EXTRA_URI = "tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.EXTRA_URI"
 
   final val OPTIONS_URI = "uri"
   final val OPTIONS_DOUBLE = "double"
@@ -39,7 +39,7 @@ object InvisibleWidgetManager {
       val views = new RemoteViews(context.getPackageName, R.layout.invisible_widget)
       try views.setOnClickPendingIntent(R.id.button, if (options.getBoolean(OPTIONS_DOUBLE, false))
         PendingIntent.getBroadcast(context, 0, new Intent(context, classOf[InvisibleWidget]).setAction(ACTION_TAP)
-          .putExtra(EXTRA_URI, uri), 0)
+          .setData(Uri.parse(uri)), 0)
         else PendingIntent.getActivity(context, 0, Intent.parseUri(uri, 0), 0))
       catch {
         case e: URISyntaxException => e.printStackTrace // seriously though, you really shouldn't reach this point
