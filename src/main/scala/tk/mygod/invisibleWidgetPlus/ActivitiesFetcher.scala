@@ -12,8 +12,8 @@ import scala.collection.mutable
  * @author Mygod
  */
 private object ActivitiesFetcher {
-  var packages: mutable.Buffer[Package] = null
-  var activitiesCounts: Array[Int] = null
+  var packages: mutable.Buffer[Package] = _
+  var activitiesCounts: Array[Int] = _
 
   def init(context: Context) = synchronized(if (packages == null) {
     val manager = context.getPackageManager

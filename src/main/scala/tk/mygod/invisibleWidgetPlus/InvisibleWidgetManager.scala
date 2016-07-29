@@ -18,6 +18,9 @@ object InvisibleWidgetManager {
   final val ACTION_TAP = "tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.ACTION_TAP"
   final val EXTRA_URI = "tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.EXTRA_URI"
 
+  final val OPTIONS_URI = "uri"
+  final val OPTIONS_DOUBLE = "double"
+
   private var emptyIntent: Intent = _
   private var emptyIntentUri: String = _
   def getEmptyIntent(context: Context) = {
@@ -31,12 +34,12 @@ object InvisibleWidgetManager {
 
   def update(context: Context, awm: AppWidgetManager, appWidgetId: Int) = {
     val options = awm.getAppWidgetOptions(appWidgetId)
-    val uri = options.getString("uri", "")
+    val uri = options.getString(OPTIONS_URI, "")
     if (!uri.isEmpty) {
       val views = new RemoteViews(context.getPackageName, R.layout.invisible_widget)
-      try views.setOnClickPendingIntent(R.id.button, if (options.getBoolean("double", false))
-        PendingIntent.getBroadcast(context, 0, new Intent(context, classOf[InvisibleWidget])
-          .putExtra(EXTRA_URI, options.getString("uri")), 0)
+      try views.setOnClickPendingIntent(R.id.button, if (options.getBoolean(OPTIONS_DOUBLE, false))
+        PendingIntent.getBroadcast(context, 0, new Intent(context, classOf[InvisibleWidget]).setAction(ACTION_TAP)
+          .putExtra(EXTRA_URI, uri), 0)
         else PendingIntent.getActivity(context, 0, Intent.parseUri(uri, 0), 0))
       catch {
         case e: URISyntaxException => e.printStackTrace // seriously though, you really shouldn't reach this point

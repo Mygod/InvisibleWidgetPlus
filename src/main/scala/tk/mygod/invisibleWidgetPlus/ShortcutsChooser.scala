@@ -98,13 +98,13 @@ class ShortcutsChooser extends ToolbarActivity with LocationObservedActivity
       val uri = data.getExtras.get(Intent.EXTRA_SHORTCUT_INTENT).asInstanceOf[Intent].toUri(0)
       if (uri != InvisibleWidgetManager.getEmptyIntentUri(this)) {
         val options = awm.getAppWidgetOptions(widgetId)
-        options.putString("uri", uri)
-        options.putBoolean("double", triggerOnDoubleTap)
+        options.putString(InvisibleWidgetManager.OPTIONS_URI, uri)
+        options.putBoolean(InvisibleWidgetManager.OPTIONS_DOUBLE, triggerOnDoubleTap)
         awm.updateAppWidgetOptions(widgetId, options)
       }
       InvisibleWidgetManager.update(this, awm, widgetId)
       setResult(Activity.RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId))
-      finish
+      finish()
     }
   }
 }
