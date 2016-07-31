@@ -8,7 +8,7 @@ import android.provider.Settings
 import android.view.{View, ViewGroup}
 import android.widget.AdapterView.{OnItemClickListener, OnItemLongClickListener}
 import android.widget._
-import tk.mygod.app.{CircularRevealActivity, LocationObservedActivity, ToolbarActivity}
+import tk.mygod.app.{CircularRevealActivity, ToolbarActivity}
 import tk.mygod.util.Conversions._
 import tk.mygod.view.AnimationHelper
 
@@ -18,7 +18,7 @@ import scala.concurrent.Future
 /**
  * @author Mygod
  */
-class ShortcutsChooser extends ToolbarActivity with LocationObservedActivity
+class ShortcutsChooser extends ToolbarActivity
   with OnItemClickListener with OnItemLongClickListener {
   private final class ShortcutsListAdapter extends BaseAdapter {
     private val shortcuts = ShortcutsFetcher.getShortcuts(ShortcutsChooser.this)
