@@ -1,0 +1,38 @@
+language: android
+
+jdk:
+  - oraclejdk8
+
+env:
+    global:
+        - SBTPATH=$HOME/.sbt
+
+scala:
+    - 2.11.8
+
+before_cache:
+    - find $HOME/.sbt -name "*.lock" | xargs rm
+    - find $HOME/.ivy2 -name "*.lock" | xargs rm
+
+cache:
+    directories:
+        - $HOME/.ivy2
+        - $HOME/.sbt
+
+android:
+    components:
+        - tools
+        - build-tools-24.0.1
+        - extra-android-m2repository
+
+install:
+    - >
+      if [ ! -f "$SBTPATH/sbt" ]; then
+          pushd $SBTPATH;
+          wget -q https://raw.githubusercontent.com/paulp/sbt-extras/master/sbt;
+          chmod a+x sbt;
+          popd;
+      fi
+
+script:
+    - $SBTPATH/sbt android:package-debug
