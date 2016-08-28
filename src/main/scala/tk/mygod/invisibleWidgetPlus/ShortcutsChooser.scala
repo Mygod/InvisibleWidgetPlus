@@ -101,7 +101,7 @@ class ShortcutsChooser extends ToolbarActivity
       val id = Integer.toString(widgetId)
       if (!InvisibleWidgetManager.getEmptyIntentUri(this).equals(uri))
         editor.putString(id + InvisibleWidgetManager.OPTIONS_URI, uri)
-          .putBoolean(id + InvisibleWidgetManager.OPTIONS_DOUBLE, true)
+          .putBoolean(id + InvisibleWidgetManager.OPTIONS_DOUBLE, triggerOnDoubleTap)
       else editor.remove(id + InvisibleWidgetManager.OPTIONS_URI).remove(id + InvisibleWidgetManager.OPTIONS_DOUBLE)
       editor.apply()
       InvisibleWidgetManager.update(this, AppWidgetManager.getInstance(this), widgetId)
