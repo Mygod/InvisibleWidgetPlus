@@ -6,6 +6,7 @@ import android.app.{Activity, ActivityOptions, PendingIntent}
 import android.appwidget.AppWidgetManager
 import android.content.{Context, Intent}
 import android.net.Uri
+import android.preference.PreferenceManager
 import android.view.View
 import android.widget.RemoteViews
 import tk.mygod.os.Build
@@ -18,8 +19,8 @@ import scala.collection.mutable
 object InvisibleWidgetManager {
   final val ACTION_TAP = "tk.mygod.invisibleWidgetPlus.InvisibleWidgetManager.ACTION_TAP"
 
-  final val OPTIONS_URI = "uri"
-  final val OPTIONS_DOUBLE = "double"
+  final val OPTIONS_URI = ".uri"
+  final val OPTIONS_DOUBLE = ".double"
 
   private var emptyIntent: Intent = _
   private var emptyIntentUri: String = _
@@ -32,19 +33,20 @@ object InvisibleWidgetManager {
     emptyIntentUri
   }
 
-  def update(context: Context, awm: AppWidgetManager, appWidgetId: Int) = {
-    val options = awm.getAppWidgetOptions(appWidgetId)
-    val uri = options.getString(OPTIONS_URI, "")
+  def update(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) = {
+    val pref = PreferenceManager.getDefaultSharedPreferences(context)
+    val id = appWidgetId.toString
+    val uri = pref.getString(id + OPTIONS_URI, "")
     if (!uri.isEmpty) {
       val views = new RemoteViews(context.getPackageName, R.layout.invisible_widget)
-      try views.setOnClickPendingIntent(R.id.button, if (options.getBoolean(OPTIONS_DOUBLE, false))
-        PendingIntent.getBroadcast(context, 0, new Intent(context, classOf[InvisibleWidget]).setAction(ACTION_TAP)
-          .setData(Uri.parse(uri)), 0)
+      try views.setOnClickPendingIntent(R.id.button, if (pref.getBoolean(id + OPTIONS_DOUBLE, false))
+        PendingIntent.getBroadcast(context, 0,
+          new Intent(context, classOf[InvisibleWidget]).setAction(ACTION_TAP).setData(Uri.parse(uri)), 0)
         else PendingIntent.getActivity(context, 0, Intent.parseUri(uri, 0), 0))
       catch {
         case e: URISyntaxException => e.printStackTrace // seriously though, you really shouldn't reach this point
       }
-      awm.updateAppWidget(appWidgetId, views)
+      appWidgetManager.updateAppWidget(appWidgetId, views)
     }
   }
 
