@@ -20,7 +20,7 @@ resConfigs := Seq("zh")
 
 resolvers += Resolver.sonatypeRepo("public")
 
-libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "3.0.0-SNAPSHOT"
+libraryDependencies += "tk.mygod" %% "mygod-lib-android" % "3.0.0"
 
 useSupportVectors
 
